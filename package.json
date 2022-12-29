@@ -7,6 +7,11 @@
     "swagger-ui-express": "^4.6.0"
   },
   "devDependencies": {
+    "jest": "^29.3.1",
+    "node-fetch": "^3.3.0",
     "supertest": "^6.3.3"
+  },
+  "scripts": {
+    "test": "jest --coverage"
   }
 }

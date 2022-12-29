@@ -1,8 +1,8 @@
 const User = require('../models/user');
 
 // newUser function for post user route
-const newUser = async (req, res, next) => {
-    const email = req.query.email, password = req.query.password;
+const createUser = async (req, res, next) => {
+    const username = req.query.user, password = req.query.password;
     const user = new User({
         email, password
     });
@@ -35,4 +35,4 @@ const newUser = async (req, res, next) => {
     
 };
 
-module.exports = { newUser};
+module.exports = {createUser};
