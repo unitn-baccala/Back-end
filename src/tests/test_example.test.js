@@ -1,13 +1,22 @@
-const app = require("../app");
 const request = require("supertest");
+require('dotenv').config();
 
 describe("test suite example", () => {
-    test("test example", () => {
-        const input = { a: 2, b: 3 };
+    test("POST /user (registrazione)", () => {
+        const { app } = require("../app");
 
-        const output = 5;
+        /* //node-fetch sembra essere incompatibile con jest
+        const fetch = require("node-fetch");
+        fetch(
+            'localhost:3000/user', 
+            { method: 'POST', body: JSON.stringify({ email: 'noem', password: 'nopw' }), headers: { 'Content-Type': 'application/json' } }
+        ).then(res => {
+            expect(res.status).toEqual(400);
+        })*/
 
-        expect(input.a + input.b).toEqual(output);
-        expect(-input.a + -input.b).toEqual(-output);
+        return request(app).post('/user/').send(JSON.stringify({ email: "AAFAFJAF", password: "JAJAJAJA" })).then(res => {
+            expect(res.status).toEqual(400);
+            app.close();
+        });
     });
 });
