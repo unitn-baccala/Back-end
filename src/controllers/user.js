@@ -2,7 +2,8 @@ const User = require('../models/user');
 
 // newUser function for post user route
 const createUser = async (req, res, next) => {
-    const username = req.query.user, password = req.query.password;
+    const params = JSON.parse(req.body);
+    const email = params.email, password = params.password;
     const user = new User({
         email, password
     });
