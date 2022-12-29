@@ -1,0 +1,82 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Swagger Baccalà - OpenAPI 3.0",
+    "description": "Documentazione delle API del servizio di gestione digitale del menù: Baccalà",
+    "contact": {
+      "url": "https://github.com/unitn-baccala"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://localhost/api/v1"
+    }
+  ],
+  "tags": [
+    {
+      "name": "user",
+      "description": "Operazioni riguardo l'utente"
+    }
+  ],
+  "paths": {
+    "/user": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Crea user",
+        "description": "Crea un nuovo user all'interno del database",
+        "operationId": "createUser",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "description": "L'email dell'utente da utilizzare per effettuare il login",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "La password dell'utente in plaintext",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "user saved successfully"
+          },
+          "400": {
+            "description": "failed to create user: inval email or password"
+          },
+          "500": {
+            "description": "failed to create user"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "mario.rossi@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "securepassword"
+          }
+        }
+      }
+    }
+  }
+}
