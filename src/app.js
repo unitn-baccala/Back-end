@@ -8,6 +8,7 @@ const swaggerDocument = require("../openapi.json");
 const app = express();
 const port = 3000;
 
+mongoose.set('strictQuery', true);
 mongoose.connect(
     process.env.MONGODB_URI,
     { useNewUrlParser: true, useUnifiedTopology: true },
@@ -20,7 +21,8 @@ mongoose.connect(
 );
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
+    console.log(`App listening on http://localhost:${port}`);
+    console.log(`Docs available at http://localhost:${port}/api-docs`);
 });
 
 app.use('/', routes);
