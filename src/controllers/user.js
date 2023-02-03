@@ -19,18 +19,18 @@ const createUser = async (req, res, next) => {
         return;
     }
 
-    const foundUser = await User.findOne({ email: user.email }).exec();
+    const wasFound = await User.findOne({ email: user.email }).exec() !== null;
 
-    if (foundUser === null) {
-        const userWasSaved = (await user.save()) !== null;
+    if (wasFound) {
+        res.status(400).send("failed to create user: username taken");
+    } else {
+        const wasSaved = (await user.save()) !== null;
         
-        if (userWasSaved) {
+        if (wasSaved) {
             res.status(201).send("user saved successfully");
         } else {
             res.status(500).send("failed to create user");
         }
-    } else {
-        res.status(400).send("failed to create user: username taken");
     }
 };
 

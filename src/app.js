@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);// avoid useless warning at every execution
 
 const express = require('express');
-const routes = require('./routes/user');
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("../openapi.json");
 
@@ -12,7 +11,7 @@ app.use(express.json());
 const port = 3000;
 
 mongoose.set('strictQuery', true);
-mongoose.connect(
+let mongodb_connection_promise = mongoose.connect(
     process.env.MONGODB_URI,
     { useNewUrlParser: true, useUnifiedTopology: true },
     (err) => {
@@ -28,6 +27,8 @@ const server = app.listen(port, () => {
     console.log(`Docs available at http://localhost:${port}/api-docs`);
 });
 
-app.use('/', routes);
+app.use('/', require('./routes/user'));
+app.use('/', require('./routes/ingredient'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-module.exports = { server };
+
+module.exports = { server, mongodb_connection_promise };
