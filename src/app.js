@@ -31,11 +31,11 @@ const server = app.listen(port, () => {
 });
 
 app.use('/api/authenticate', authentication);
+app.use('/api/', user);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(tokenChecker);
 
-app.use('/api/', user);
 app.use('/api/', ingredient);
 
 module.exports = { server, mongodb_connection_promise };
