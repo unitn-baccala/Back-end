@@ -3,8 +3,10 @@ const mongoose = require('mongoose');
 mongoose.set('strictQuery', true);
 
 const express = require('express');
-const routes = require('./routes/user');
 const authentication = require('./routes/authentication');
+const tokenChecker = require('./routes/tokenChecker');
+const user = require('./routes/user');
+const ingredient = require('./routes/ingredient');
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("../openapi.json");
 
@@ -29,10 +31,11 @@ const server = app.listen(port, () => {
 });
 
 app.use('/api/authenticate', authentication);
-
-app.use('/', require('./routes/user'));
-app.use('/', require('./routes/ingredient'));
-
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+app.use(tokenChecker);
+
+app.use('/api/', user);
+app.use('/api/', ingredient);
 
 module.exports = { server, mongodb_connection_promise };
