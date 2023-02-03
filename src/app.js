@@ -17,7 +17,7 @@ mongoose.connect(
     { useNewUrlParser: true, useUnifiedTopology: true },
     (err) => {
         if (err) {
-            return console.log("Error: ", err);
+            return console.log("mongoose.connect failed with error: ", err);
         }
         console.log("MongoDB Connection -- Ready state is:", mongoose.connection.readyState);
     }
