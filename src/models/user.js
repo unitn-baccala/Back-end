@@ -5,7 +5,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    password: {
+    password_hash: {
         type: String,
         required: true,
     },
@@ -13,7 +13,7 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     }
-});
+}, { versionKey: false });
 
 const User = mongoose.model("User", UserSchema);
 
