@@ -1,9 +1,10 @@
-require('dotenv').config();
+require('dotenv').config(); //importante che avvenga il prima possibile
 const mongoose = require('mongoose');
-mongoose.set('strictQuery', false);// avoid useless warning at every execution
+mongoose.set('strictQuery', true);
 
 const express = require('express');
 const routes = require('./routes/user');
+const authentication = require('./routes/authentication');
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("../openapi.json");
 
@@ -11,7 +12,6 @@ const app = express();
 app.use(express.json());
 const port = 3000;
 
-mongoose.set('strictQuery', true);
 mongoose.connect(
     process.env.MONGODB_URI,
     { useNewUrlParser: true, useUnifiedTopology: true },
@@ -28,6 +28,9 @@ const server = app.listen(port, () => {
     console.log(`Docs available at http://localhost:${port}/api-docs`);
 });
 
+app.use('/api/authenticate', authentication);
+
 app.use('/', routes);
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 module.exports = { server };
