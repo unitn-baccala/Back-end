@@ -4,7 +4,7 @@ mongoose.set('strictQuery', true);
 
 const express = require('express');
 const authentication = require('./routes/authentication');
-const tokenChecker = require('./routes/tokenChecker');
+const tokenChecker = require('./functions/tokenChecker');
 const user = require('./routes/user');
 const ingredient = require('./routes/ingredient');
 const swaggerUi = require("swagger-ui-express");
