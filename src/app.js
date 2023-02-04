@@ -9,6 +9,7 @@ const authentication = require('./routes/authentication');
 const tokenChecker = require('./functions/tokenChecker');
 const user = require('./routes/user');
 const ingredient = require('./routes/ingredient');
+const dish = require('./routes/dish');
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("../openapi.json");
 
@@ -39,5 +40,6 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(tokenChecker);
 
 app.use('/api/', ingredient);
+app.use('/api/', dish);
 
 module.exports = { server, mongodb_connection_promise };

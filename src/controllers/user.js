@@ -1,8 +1,13 @@
 const User = require('../models/user');
 const argon2 = require('argon2');
 
-// POST /user => createUser
+// POST /api/user => createUser
 const createUser = async (req, res, next) => {
+    if (req.body == null) {
+        res.status(400).send("failed to create user");
+        return;
+    }
+
     const password = req.body.password;
     let email = req.body.email;
 
@@ -46,7 +51,7 @@ const createUser = async (req, res, next) => {
     }
 };
 
-// DELETE /user => deleteUser
+// DELETE /api/user => deleteUser
 const deleteUser = async (req, res, next) => {
     const email = req.body.email, password = req.body.password;
 
