@@ -31,9 +31,9 @@ const server = app.listen(port, () => {
     console.log(`Docs available at http://localhost:${port}/api-docs`);
 });
 
-app.use('/api/authenticate', authentication);
+app.use('/api/', authentication);
 app.use('/api/', user);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(tokenChecker);
 
