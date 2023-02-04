@@ -2,6 +2,11 @@ const Ingredient = require('../models/ingredient')
 
 // POST /ingredient => createIngredient
 const createIngredient = async (req, res, next) => { 
+    if (req.body == null) {
+        res.status(400).send("failed to create user");
+        return;
+    }
+
     const name = req.body.name;
     if(name == null || String(name).length < 1) {
         res.status(400).send("failed to create ingredient: invalid name");
