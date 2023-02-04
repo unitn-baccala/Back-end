@@ -9,10 +9,11 @@ router.post('', async (req, res) => {
     const foundUser = await User.findOne({ email: userEmail }).exec();
 
     if (foundUser === null) {
+        console.log("no such user: ", userEmail);
         res.status(404).send("wrong credentials");
     } else {
         if(await argon2.verify(foundUser.password_hash, userPassword)) {
-            //user authenticad
+            //user authenticated
             const payload = { email: userEmail };
             const options = { expiresIn: 86400 };
             jwt.sign(payload, process.env.JWT_SECRET, options, (err, jwtToken) => {
