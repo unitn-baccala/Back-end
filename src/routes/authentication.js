@@ -4,12 +4,12 @@ const argon2 = require('argon2');
 const router = express.Router();
 const User = require('../models/user');
 
-router.post('', async (req, res) => {
+router.post('/authenticate', async (req, res) => {
     const userEmail = req.body.email, userPassword = req.body.password;
     const foundUser = await User.findOne({ email: userEmail }).exec();
 
     if (foundUser === null) {
-        res.status(404).send("wrong credentials");
+        res.status(404).send("wrong credentials"); //se l'utente non invia una password il server
     } else {
         if(await argon2.verify(foundUser.password_hash, userPassword)) {
             //user authenticad
