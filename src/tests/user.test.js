@@ -1,6 +1,8 @@
 const request = require('./request'); //for http requests
 
-const post = request.post('/user'), del = request.del('/user');
+const api_path = '/api/user';
+
+const post = request.post(api_path), del = request.del(api_path);
 
 let server, mongoose;
 
@@ -30,7 +32,7 @@ const delete_data = (
     )
 );
 
-describe("/user", () => {
+describe(api_path, () => {
     beforeAll(async () => {
         let app = require("../app");
         server = app.server;

@@ -1,6 +1,6 @@
 const request = require('./request'); //for http requests
 
-const api_path = '/ingredient';
+const api_path = '/api/ingredient';
 
 const post = request.post(api_path), del = request.del(api_path);
 
@@ -15,7 +15,7 @@ const post_data = [
 ];
 const delete_data = post_data.map(a => a[0] == 201 ? [200, a[1]] : a);
 
-describe("/ingredient", () => {
+describe(api_path, () => {
     beforeAll(async () => {
         let app = require("../app");
         server = app.server;
