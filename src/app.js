@@ -27,8 +27,8 @@ let mongodb_connection_promise = mongoose.connect(
 );
 
 const server = app.listen(port, () => {
-    console.log(`App listening on http://localhost:${port}`);
-    console.log(`Docs available at http://localhost:${port}/api-docs`);
+    console.log(`App listening on http://localhost:${port}\n`+
+    `Docs available at http://localhost:${port}/api-docs`);
 });
 
 app.use('/api/', authentication);

@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
-const DishSchema = new mongoose.Schema({
+const schema = new mongoose.Schema({
+    ownerEmail: {
+        type: String,
+        required: true
+    },
     name: {
         type: String,
         required: true,
@@ -19,6 +23,6 @@ const DishSchema = new mongoose.Schema({
     },
 }, { versionKey: false });
 
-const Dish = mongoose.model("Dish", DishSchema);
+const Dish = mongoose.model("Dish", schema);
 
 module.exports = Dish;
