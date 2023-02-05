@@ -9,12 +9,13 @@ let server, mongoose;
 const post_data = [
     [ 201, { email: 'marco.rossi@example.com', password: 'PasswordSicura42' } ],
     [ 400, { email: 'marco.rossi@example.com', password: 'PasswordSicura42' } ],   // repeat valid data
-    [ 400, { email: 'marco.rossi@example.com', password: 'badpw' } ],
     [ 400, { email: 'marco.rossi@example.com', password: 'PasswordSicura43' } ],   // repeat valid email, different password
+    [ 400, { email: 'marco.rossi@example.com', password: 'badpw' } ],
     //invalid data
     [ 400, { email: 'badem', password: 'badpw' } ],
     [ 400, { email: null, password: null } ],
     [ 400, { } ], 
+    [ 400, null ],
     [ 400, { email: 'badem' } ],
     [ 400, { email: 'badem', password: 'PasswordSicura42' } ],
     [ 400, { password: 'PasswordSicura42' } ],
