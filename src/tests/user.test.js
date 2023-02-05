@@ -7,21 +7,24 @@ const post = request.post(api_path), del = request.del(api_path);
 let server, mongoose;
 
 const post_data = [
-    [ 201, { email: 'marco.rossi@example.com', password: 'PasswordSicura42' } ],
-    [ 400, { email: 'marco.rossi@example.com', password: 'PasswordSicura42' } ],   // repeat valid data
-    [ 400, { email: 'marco.rossi@example.com', password: 'PasswordSicura43' } ],   // repeat valid email, different password
-    [ 400, { email: 'marco.rossi@example.com', password: 'badpw' } ],
+    [ 201, { email: 'marco.rossi@example.com', password: 'PasswordSicura42', business_name: 'Da Marco' } ],
+    [ 400, { email: 'marco.rossi@example.com', password: 'PasswordSicura42', business_name: 'Da Marco' } ],   // repeat valid data
+    [ 400, { email: 'marco.rossi@example.com', password: 'PasswordSicura43', business_name: 'Da Marco' } ],   // repeat valid email, different password
+    [ 400, { email: 'marco.rossi@example.com', password: 'badpw', business_name: 'Da Marco' } ],
     //invalid data
+    [ 400, { email: 'badem', password: 'badpw', business_name: 'bad' } ],
     [ 400, { email: 'badem', password: 'badpw' } ],
-    [ 400, { email: null, password: null } ],
+    [ 400, { email: null, password: null, business_name: null } ],
     [ 400, { } ], 
     [ 400, null ],
     [ 400, { email: 'badem' } ],
     [ 400, { email: 'badem', password: 'PasswordSicura42' } ],
     [ 400, { password: 'PasswordSicura42' } ],
     [ 400, { password: 'badpw' } ],
-    [ 400, { email: 'giovanni.bianchi@example.com' } ],                            // vaild (& unique) email but no pw
-    [ 400, { email: 'giovanni.bianchi@example.com', password: 'badpw' } ],         // vaild (& unique) email but invalid pw
+    [ 400, { email: 'giovanni.bianchi@example.com', business_name: 'Da Giovanni'} ],                            // no pw
+    [ 400, { email: 'giovanni.bianchi@example.com', business_name: 'Da Giovanni', password: 'badpw' } ],        // invalid pw
+    [ 400, { email: 'giovanni.bianchi@example.com', password: 'OttimaPassword1234' } ],                         // no business_name
+    [ 400, { email: 'giovanni.bianchi@example.com', password: 'OttimaPassword1234', business_name: 'Da Marco' } ],                         // no business_name
 ];
 const delete_data = (
     [
