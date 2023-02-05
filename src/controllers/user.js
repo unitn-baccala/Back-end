@@ -33,22 +33,29 @@ const createUser = async (req, res, next) => {
         return;
     }
 
-    const wasFound = await User.findOne({ email }).exec() !== null;
+    const email_taken = await User.findOne({ email }).exec() !== null;
     
-    if (wasFound) {
-        res.status(400).send({ msg: "failed to create user: username taken" });
-    } else {
-        const user = new User({
-            email: req.body.email, password_hash: await argon2.hash(password)
-        });
+    if (email_taken) {
+        res.status(400).send({ msg: "failed to create user: e-mail address is taken" });
+        return;
+    }
 
-        const wasSaved = (await user.save()) !== null;
-        
-        if (wasSaved) {
-            res.status(201).send({ msg: "user saved successfully" });
-        } else {
-            res.status(500).send({ msg: "failed to create user: internal server error" });
-        }
+    const business_name_taken = await User.findOne({ business_name }).exec() !== null;
+    if(business_name_taken){
+        res.status(400).send({ msg: "failed to create user: business name is taken" });
+        return;
+    }
+
+    const user = new User({
+        email, password_hash: await argon2.hash(password), business_name
+    });
+
+    const wasSaved = (await user.save()) !== null;
+    
+    if (wasSaved) {
+        res.status(201).send({ msg: "user saved successfully" });
+    } else {
+        res.status(500).send({ msg: "failed to create user: internal server error" });
     }
 };
 

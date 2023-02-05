@@ -6,7 +6,8 @@ const post = make_method('POST'), del = make_method('DELETE');
 const authenticate = data => bent('http://localhost:3000', 'POST', 'json', 200) ('/api/authenticate', data);
 const test_credentials = {
     email: "test.user@for.tests.com",
-    password: "PasswordSicura23"
+    password: "PasswordSicura23",
+    business_name: "Nome Ristorante Test",
 };
 // creates the user if it does not exist, then returns its jwt
 const init_test_auth = async () => {
