@@ -1,8 +1,10 @@
 require('dotenv').config(); //importante che avvenga il prima possibile
-const mongoose = require('mongoose');
-mongoose.set('strictQuery', true);
 
 const express = require('express');
+const cors = require('cors')
+
+const mongoose = require('mongoose');
+mongoose.set('strictQuery', true);
 const authentication = require('./routes/authentication');
 const tokenChecker = require('./functions/tokenChecker');
 const user = require('./routes/user');
@@ -32,7 +34,7 @@ const server = app.listen(port, () => {
 });
 
 app.use('/api/', authentication);
-app.use('/api/', user);
+app.use('/api/', cors(), user);
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(tokenChecker);
