@@ -49,5 +49,26 @@ const deleteIngredient = async (req, res, next) => {
     }
 }
 
+const getIngredients = async (req, res, next) => {
+    if (req.params == null) {
+        res.status(400).send("no parameters");
+        return;
+    }
+    
+    const parameters = req.params;
 
-module.exports = { createIngredient, deleteIngredient };
+    if(parameters.business_name == null)
+        res.status(400).send("no business_name specified");
+    else {
+        const ingredients = await Ingredient.find();
+
+        if (ingredients) {
+            res.status(200).send("");
+        } else {
+            res.status(400).send("no ingredients found");
+        }
+    }
+}
+
+
+module.exports = { createIngredient, deleteIngredient, getIngredients };
