@@ -5,6 +5,10 @@ const schema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    business_name: {
+        type: String,
+        required: true,
+    },
     password_hash: {
         type: String,
         required: true,
@@ -12,7 +16,7 @@ const schema = new mongoose.Schema({
     enable_2fa: {
         type: Boolean,
         default: false,
-    }
+    },
 }, { versionKey: false });
 
 const User = mongoose.model("User", schema);

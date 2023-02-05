@@ -8,8 +8,8 @@ router.post('/authenticate', async (req, res) => {
     const userEmail = req.body.email, userPassword = req.body.password;
     const foundUser = await User.findOne({ email: userEmail }).exec();
 
-    const wrong_creds_res = { error: "wrong credentials" };
-    const server_error_res = { error: "error" };
+    const wrong_creds_res = { msg: "wrong credentials" };
+    const server_error_res = { msg: "error" };
 
     if (foundUser === null) {
         res.status(404).send(wrong_creds_res);
