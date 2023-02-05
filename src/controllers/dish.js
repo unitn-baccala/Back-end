@@ -3,11 +3,11 @@ const Ingredient = require('../models/ingredient');
 // POST /dish => createDish
 const createDish = async (req, res, next) => { 
     if (req.body == null || req.body.jwt_payload == null) {
-        res.status(400).send({ msg: "failed to create dish" });
+        res.status(400).send({ msg: "failed to create dish: req.body == null || req.token == null" });
         return;
     }
 
-    const ownerEmail = req.body.jwt_payload.email, name = req.body.name;
+    const owner_email = req.body.jwt_payload.email, name = req.body.name;
     const description = req.body.description, image = req.body.image, ingredients = req.body.ingredients;
 
     if(name == null || String(name).length < 1) {
@@ -20,14 +20,14 @@ const createDish = async (req, res, next) => {
         return;
     }
 
-    const found = (await Dish.findOne({ ownerEmail, name }).exec()) !== null;
+    const found = (await Dish.findOne({ owner_email, name }).exec()) !== null;
 
     if(found) {
         res.status(400).send({ msg: "failed to create dish: name taken" });
         return;
     }
 
-    const ingredient_exists = async ing_name => (await Ingredient.findOne({ownerEmail, name: ing_name}).exec()) !== null;
+    const ingredient_exists = async ing_name => (await Ingredient.findOne({ owner_email, name: ing_name }).exec()) !== null;
 
     let every_ingredient_exists = true;
     if(ingredients != null)
@@ -52,32 +52,32 @@ const createDish = async (req, res, next) => {
         }
     }
     
-    const document = new Dish({ ownerEmail, name, description, img_buffer, ingredients });
+    const document = new Dish({ owner_email, name, description, img_buffer, ingredients });
     const wasSaved = (await document.save()) !== null;
 
     if (wasSaved) {
         res.status(201).send({ msg: "dish saved successfully" });
     } else {
-        res.status(500).send({ msg: "failed to create dish" });
+        res.status(500).send({ msg: "failed to create dish: internal server error" });
     }
 }
 
 const deleteDish = async (req, res, next) => {
 if (req.body == null || req.body.jwt_payload == null) {
-        res.status(400).send({ msg: "failed to create dish" });
+        res.status(400).send({ msg: "failed to create dish: req.body == null || req.body.token == null" });
         return;
     }
-    const name = req.body.name, ownerEmail = req.body.jwt_payload.email;
+    const name = req.body.name, owner_email = req.body.jwt_payload.email;
 
     if(name == null)
-        res.status(400).send({ msg: "failed to delete dish" });
+        res.status(400).send({ msg: "failed to delete dish: req.body.name == null" });
     else {
-        let del_count = (await Dish.deleteOne({ ownerEmail, name })).deletedCount;
+        let del_count = (await Dish.deleteOne({ owner_email, name })).deletedCount;
 
         if (del_count != 0) {
             res.status(200).send({ msg: "dish deleted successfully" });
         } else {
-            res.status(400).send({ msg: "failed to delete dish" });
+            res.status(400).send({ msg: "failed to delete dish: no dish with such name" });
         }
     }
 }

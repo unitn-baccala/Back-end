@@ -1,6 +1,6 @@
 const bent = require('bent');
 
-const make_method = method => path => (code, data) => bent('http://localhost:3000', method, 'string', code) (path, data);
+const make_method = method => path => (code, data) => bent('http://localhost:3000', method, 'json', code) (path, data);
 const post = make_method('POST'), del = make_method('DELETE');
 
 const authenticate = data => bent('http://localhost:3000', 'POST', 'json', 200) ('/api/authenticate', data);
