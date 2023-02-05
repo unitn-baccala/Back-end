@@ -16,9 +16,9 @@ const createUser = async (req, res, next) => {
         return;
     }
 
-    // pw must have 1 lowercase letter, 1 uppercase, 1 number and must be between 8 and 64 characters
+    // pw must have 1 (lower of uppercase) letter and must be between 12 and 64 characters
     // the maximum is important to protect from long password DoS attacks
-    if (!password.match(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])([^\s]){8,64}$/)) {
+    if (!password.match(/^(?=.*[a-zA-Z])(.{12,64})$/gm)) {
         res.status(400).send("failed to create user: insecure password");
         return;
     }
