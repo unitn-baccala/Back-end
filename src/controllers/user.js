@@ -4,7 +4,7 @@ const argon2 = require('argon2');
 // POST /api/user => createUser
 const createUser = async (req, res, next) => {
     if (req.body == null) {
-        res.status(400).send({ msg: "failed to create user" });
+        res.status(400).send({ msg: "failed to create user: req.body == null" });
         return;
     }
 
@@ -13,7 +13,7 @@ const createUser = async (req, res, next) => {
     const business_name = req.body.business_name;
 
     if (password == null || email == null || business_name == null) {
-        res.status(400).send({ msg: "failed to create user" });
+        res.status(400).send({ msg: "failed to create user: (req.body.)password == null || email == null || business_name == null" });
         return;
     }
 
@@ -47,7 +47,7 @@ const createUser = async (req, res, next) => {
         if (wasSaved) {
             res.status(201).send({ msg: "user saved successfully" });
         } else {
-            res.status(500).send({ msg: "failed to create user" });
+            res.status(500).send({ msg: "failed to create user: internal server error" });
         }
     }
 };
@@ -57,7 +57,7 @@ const deleteUser = async (req, res, next) => {
     const email = req.body.email, password = req.body.password;
 
     if(email == null || password == null)
-        res.status(400).send({ msg: "failed to delete user" });
+        res.status(400).send({ msg: "failed to delete user: (req.body.)email == null || password == null" });
     else {
         const user = await User.findOne({ email }).exec()
     
@@ -67,10 +67,10 @@ const deleteUser = async (req, res, next) => {
             if (del_count != 0) {
                 res.status(200).send({ msg: "user deleted successfully" });
             } else {
-                res.status(500).send({ msg: "failed to delete user" });
+                res.status(500).send({ msg: "failed to delete user: internal server error" });
             }
         } else {
-            res.status(400).send({ msg: "failed to delete user" });
+            res.status(400).send({ msg: "failed to delete user: no user with such credentials" });
         }
     }
 }
