@@ -52,21 +52,21 @@ const deleteIngredient = async (req, res, next) => {
 
 const getIngredients = async (req, res, next) => {
     if (req.params == null) {
-        res.status(400).send("no parameters");
+        res.status(400).send({ msg: "no parameters"});
         return;
     }
     
     const parameters = req.params;
 
     if(parameters.business_name == null)
-        res.status(400).send("no business_name specified");
+        res.status(400).send({ msg: "no business_name specified" });
     else {
         const ingredients = await Ingredient.find();
 
         if (ingredients) {
-            res.status(200).send("");
+            res.status(200).send(ingredients);
         } else {
-            res.status(400).send("no ingredients found");
+            res.status(400).send({ msg: "no ingredients found" });
         }
     }
 }
