@@ -1,13 +1,17 @@
 
 const mongoose = require("mongoose");
 
-const IngredientSchema = new mongoose.Schema({
+const schema = new mongoose.Schema({
+    ownerEmail: {
+        type: String,
+        required: true
+    },
     name: {
         type: String,
         required: true,
-    }
-});
+    },
+}, { versionKey: false });
 
-const Ingredient = mongoose.model("Ingredient", IngredientSchema);
+const Ingredient = mongoose.model("Ingredient", schema);
 
 module.exports = Ingredient;
