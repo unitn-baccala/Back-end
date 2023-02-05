@@ -8,8 +8,11 @@ router.post('/authenticate', async (req, res) => {
     const userEmail = req.body.email, userPassword = req.body.password;
     const foundUser = await User.findOne({ email: userEmail }).exec();
 
+    const wrong_creds_res = { error: "wrong credentials" };
+    const server_error_res = { error: "error" };
+
     if (foundUser === null) {
-        res.status(404).send("wrong credentials"); //se l'utente non invia una password il server
+        res.status(404).send(wrong_creds_res);
     } else {
         if(await argon2.verify(foundUser.password_hash, userPassword)) {
             //user authenticated
@@ -18,13 +21,13 @@ router.post('/authenticate', async (req, res) => {
             jwt.sign(payload, process.env.JWT_SECRET, options, (err, jwtToken) => {
                 if(err) {
                     //console.log(err);
-                    res.status(500).send("error");
+                    res.status(500).send(server_error_res);
                 } else {
                     res.status(200).send({ token: jwtToken });
                 }
             });
         } else {
-            res.status(404).send("wrong credentials");
+            res.status(404).send(wrong_creds_res);
         }
     }
 });
