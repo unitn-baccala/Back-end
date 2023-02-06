@@ -23,14 +23,9 @@ describe('/api/authenticate', () => {
         jwt = await request.init_test_auth();
     });
 
-    invalid_credentials.forEach(([code, data]) => {
-        test("POST auth (" + code +")" + JSON.stringify(data), async () => {
-            await request.post('/api/authenticate')(code, data);
-        })
-    });
+    test.each(invalid_credentials)("POST auth %d %o", async (c,d) => await request.post('/api/authenticate')(c,d));
 
     test("using bad jwt", async () => {
-        await Promise.allSettled([post(jwt)(201, valid_document)]);
         await del({token: "not really a jwt"})(403, valid_document);
     });
 

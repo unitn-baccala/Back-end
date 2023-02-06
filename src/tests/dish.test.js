@@ -38,13 +38,10 @@ describe(api_path, () => {
             del(200, valid_document),
         ]);
     });
-    post_data.forEach((e) => {
-        test("POST (dish creation)" + JSON.stringify(e), async () => await post(e[0], e[1]));
-    });
-    delete_data.forEach((e) => {
-        test("DELETE (dish deletion)" + JSON.stringify(e), async () => await del(e[0], e[1]));
-    });
-    //test.each(delete_data)("DELETE (dish deletion) %d, %o", del);
+
+    test.each(post_data)("POST (dish creation) %d, %o", async (c,d) => await post(c,d));
+
+    test.each(delete_data)("DELETE (dish deletion) %d, %o", async (c,d) => await del(c,d));
     
 
     afterAll(async () => {
