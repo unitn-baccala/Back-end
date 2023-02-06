@@ -39,6 +39,7 @@ const createDish = async (req, res, next) => {
     if(!all_ingredients_exist)
         return fail(400, "some ingredients do not exist");
 
+    /*
     let img_buffer;
     if(typeof image === 'String') {
         try {
@@ -46,9 +47,10 @@ const createDish = async (req, res, next) => {
         } catch(e) {
             return fail(400, "failed to convert image from base64");
         }
-    }
+    }*/
+    //https://mongoosejs.com/docs/schematypes.html#buffers moongose lo converte automaticamente sembra
     
-    const document = new Dish({ owner_id, name, description, img_buffer, ingredients, categories }); //implementare tutti i controlli sulle categorie
+    const document = new Dish({ owner_id, name, description, image, ingredients, categories }); //implementare tutti i controlli sulle categorie
     const was_saved = (await document.save()) !== null;
     /* istanbul ignore next */
     if(!was_saved)
