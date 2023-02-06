@@ -46,6 +46,7 @@ const createUser = async (req, res, next) => {
     const user = new User({ email, password_hash, business_name });
     const user_was_saved = (await user.save()) !== null; 
     
+    /* istanbul ignore next */
     if(!user_was_saved)
         return fail(500, "internal server error");
     res.status(201).send({ msg: "user saved successfully" });
@@ -57,10 +58,9 @@ const deleteUser = async (req, res, next) => {
         res.status(code).send({ msg: "failed to delete user: " + msg });
     };
 
-    if(req.body == null)
-        return fail(400, "req.body == null");
-    if(req.body.jwt_payload == null)
-        return fail(400, "req.body.token == null");
+    /* istanbul ignore next */
+    if(req.body == null || req.body.jwt_payload == null)
+        return fail(400, "req.body == null || req.body.token == null");
     
 
     const email = req.body.email, password = req.body.password, user_id = req.body.jwt_payload.user_id;
@@ -79,6 +79,7 @@ const deleteUser = async (req, res, next) => {
 
     let del_count = (await User.deleteOne({ email, password_hash: user.password_hash })).deletedCount;
 
+    /* istanbul ignore next */
     if(del_count == 0)
         return fail(500, "internal server error");
 

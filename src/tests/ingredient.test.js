@@ -43,6 +43,10 @@ describe(api_path, () => {
     test("POST (ingredient creation) without auth, null body", () => request.post("/api/ingredient")(401, null));
 
     test("GET (ingredient read)", () => request.get("/api/ingredient?business_name=Nome Ristorante Test")(200, null));
+
+    test("GET (ingredient read)", () => request.get("/api/ingredient?business_name=Ristorante Impossibile")(400, null));
+
+    test("GET (ingredient read)", () => request.get("/api/ingredient")(400, null));
     
 
     afterAll(async () => {

@@ -18,6 +18,7 @@ const post_data = [
     [ 400, { } ], 
     [ 400, null ],
     [ 400, { email: 'badem' } ],
+    [ 400, { email: 'badem', password: 'PasswordSicura43', business_name: 'Da Marco' } ],
     [ 400, { email: 'badem', password: 'PasswordSicura42' } ],
     [ 400, { password: 'PasswordSicura42' } ],
     [ 400, { password: 'badpw' } ],

@@ -11,6 +11,7 @@ const invalid_credentials = [
     [ 404, { email: "not an email", password: "badpw" } ],
     [ 404, { email: "test.user@for.tests.com", password: "incorrectpw" } ],
     [ 400, { email: "test.user@for.tests.com", password: null } ],
+    [ 400, { password: "VeryGoodPassword!" } ],
 ];
 describe('/api/authenticate', () => {
     beforeAll(async () => {

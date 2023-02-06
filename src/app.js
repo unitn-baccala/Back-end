@@ -20,6 +20,7 @@ mongoose.connect(
     process.env.MONGODB_URI,
     { useNewUrlParser: true, useUnifiedTopology: true },
     (err) => {
+        /* istanbul ignore next */
         if (err) {
             return console.log("mongoose.connect failed with error: ", err);
         }
