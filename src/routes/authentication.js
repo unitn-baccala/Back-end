@@ -5,18 +5,21 @@ const router = express.Router();
 const User = require('../models/user');
 
 router.post('/authenticate', async (req, res) => {
-    const userEmail = req.body.email, userPassword = req.body.password;
-    const foundUser = await User.findOne({ email: userEmail }).exec();
+    const user_email = req.body.email, user_password = req.body.password;
+    if(user_password == null || user_email == null) {
+        res.status(400).send({ msg : "authentication failed: (req.body.)password == null || email == null" });
+    }
+    const found_user = await User.findOne({ email: user_email }).exec();
 
-    const wrong_creds_res = { msg: "wrong credentials" };
-    const server_error_res = { msg: "error" };
+    const wrong_creds_res = { msg: "authentication failed: wrong credentials" };
+    const server_error_res = { msg: "authentication failed: error" };
 
-    if (foundUser === null) {
+    if (found_user == null) {
         res.status(404).send(wrong_creds_res);
     } else {
-        if(await argon2.verify(foundUser.password_hash, userPassword)) {
+        if(await argon2.verify(found_user.password_hash, user_password)) {
             //user authenticated
-            const payload = { email: userEmail };
+            const payload = { user_id: found_user._id };
             const options = { expiresIn: 86400 };
             jwt.sign(payload, process.env.JWT_SECRET, options, (err, jwtToken) => {
                 if(err) {

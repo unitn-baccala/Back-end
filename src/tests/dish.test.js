@@ -6,12 +6,10 @@ const auth_post = request.auth_post(api_path), auth_del = request.auth_del(api_p
 
 let server, mongoose;
 
-const required_ingredients = ['farina', 'passata di pomodoro', 'mozzarella'];
-
 const valid_document = { 
     name: 'pizza margherita',
     description: 'our italian chef\'s favourite',
-    ingredients: required_ingredients
+    ingredients: [ '63dff59904e85f8fab19c3fe', '63dff59904e85f8fab19c401', '63dff59904e85f8fab19c404' ] 
 };
 const post_data = [
     [ 201, valid_document ],
@@ -25,6 +23,7 @@ const post_data = [
     [ 400, null]
 ];
 const delete_data = post_data.map(a => a[0] == 201 ? [200, a[1]] : a);
+
 let post, del, jwt;
 describe(api_path, () => {
     beforeAll(async () => {
@@ -37,11 +36,6 @@ describe(api_path, () => {
         await Promise.allSettled([
             del(200, valid_document),
         ]);
-        for(let i = 0; i < required_ingredients.length; i++) {
-            await Promise.allSettled([
-                request.auth_post('/api/ingredient')(jwt)(201,{ name: required_ingredients[i] })
-            ]);
-        }
     });
     post_data.forEach((e) => {
         test("POST (dish creation)" + JSON.stringify(e), () => post(e[0], e[1]));
