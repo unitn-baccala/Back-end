@@ -1,4 +1,5 @@
-const Dish = require('../models/dish')
+const Dish = require('../models/dish');
+const User = require('../models/user');
 const Ingredient = require('../models/ingredient');
 const ObjectId = require('mongoose').Types.ObjectId;
 // POST /dish => createDish
@@ -96,14 +97,14 @@ const getDishes = async (req, res, next) => {
             return;
         }
 
-        const ingredients = await Ingredient.find({ owner_id: user._id });
+        const dishes = await Dish.find({ owner_id: user._id });
 
-        if (ingredients) {
-            res.status(200).send(ingredients);
+        if (dishes) {
+            res.status(200).send(dishes);
         } else {
-            res.status(400).send({ msg: "no ingredients found" });
+            res.status(400).send({ msg: "no dishes found" });
         }
     }
 }
 
-module.exports = { createDish, deleteDish };
+module.exports = { createDish, deleteDish, getDishes };
