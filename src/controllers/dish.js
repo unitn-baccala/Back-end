@@ -25,22 +25,19 @@ const createDish = async (req, res, next) => {
     if(found)
         return fail(400, "name taken");
 
-    const ingredient_exists = async _id => {
+    let ingredients_objid = [];
+    let all_ingredients_exist = ingredients.every(ing => {
         try {
-            return (await Ingredient.findOne({ owner_id, _id }).exec()) !== null;
+            ingredients_objid.push(ObjectId(ing));
+            return true;
         } catch(e) {
             return false;
         }
-    };
+    });
 
-    let every_ingredient_exists = true;
-    if(ingredients != null)
-        for(let i = 0; i < ingredients.length && every_ingredient_exists; i++) {
-            every_ingredient_exists = await ingredient_exists(ingredients[i]);
-        }
+    all_ingredients_exist = all_ingredients_exist && (await Ingredient.find({ _id: { $in: ingredients_objid } })).length == ingredients.length;
     
-
-    if(!every_ingredient_exists)
+    if(!all_ingredients_exist)
         return fail(400, "some ingredients do not exist");
 
     let img_buffer;
@@ -53,7 +50,9 @@ const createDish = async (req, res, next) => {
     }
     
     const document = new Dish({ owner_id, name, description, img_buffer, ingredients, categories }); //implementare tutti i controlli sulle categorie
+    console.log(document._id);
     const was_saved = (await document.save()) !== null;
+    console.log(document._id);
     /* istanbul ignore next */
     if(!was_saved)
         return fail(500, "internal server error");
