@@ -39,7 +39,7 @@ const createMenu = async (req, res, next) => {
     if(!all_dishes_exist)
         return fail(400, "some dishes do not exist");
 
-    
+
     const document = new Menu({ owner_id, name, dishes }); //implementare tutti i controlli sulle categorie
 
     const was_saved = (await document.save()) !== null;
@@ -69,7 +69,7 @@ const deleteMenu = async (req, res, next) => {
     res.status(200).send({ msg: "menu deleted successfully" });
 }
 
-const getMenues = async (req, res, next) => {
+const getMenus = async (req, res, next) => {
     const fail = failHandler(res, "failed to get menus: ");
 
     if (req.query == null) {
@@ -86,14 +86,14 @@ const getMenues = async (req, res, next) => {
             return fail(400, "no such business name found");
         }
 
-        const dishes = await Dish.find({ owner_id: user._id });
+        const menus = await Menu.find({ owner_id: user._id });
 
-        if (dishes) {
-            res.status(200).send(dishes);
+        if (menus) {
+            res.status(200).send(menus);
         } else {
             return fail(400, "no dishes found");
         }
     }
 }
 
-module.exports = { createMenu, deleteMenu, getMenues };
+module.exports = { createMenu, deleteMenu, getMenues: getMenus };

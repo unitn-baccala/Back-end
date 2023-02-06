@@ -10,7 +10,7 @@ const user = require('./routes/user');
 const ingredient = require('./routes/ingredient');
 const dish = require('./routes/dish');
 const category = require('./routes/category');
-const menu = require('./routes/menu');
+const menu = require('./routes/menu')
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("../openapi.json");
 
