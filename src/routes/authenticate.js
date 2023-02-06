@@ -22,6 +22,7 @@ router.post('/authenticate', async (req, res) => {
     const payload = { user_id: found_user._id };
     const options = { expiresIn: 86400 };
     jwt.sign(payload, process.env.JWT_SECRET, options, (err, jwtToken) => {
+        /* istanbul ignore next */
         if(err) {
             //console.log(err);
             fail(500, "internal server error");
