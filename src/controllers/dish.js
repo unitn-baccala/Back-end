@@ -24,23 +24,20 @@ const createDish = async (req, res, next) => {
     if(found)
         return fail(res, 400, failMessage, "name taken");
 
-    const ingredient_exists = async _id => {
+    let ingredients_objid = [];
+    let all_ingredients_exist = ingredients.every(ing => {
         try {
-            return (await Ingredient.findOne({ owner_id, _id }).exec()) !== null;
+            ingredients_objid.push(ObjectId(ing));
+            return true;
         } catch(e) {
             return false;
         }
-    };
+    });
 
-    let every_ingredient_exists = true;
-    if(ingredients != null)
-        for(let i = 0; i < ingredients.length && every_ingredient_exists; i++) {
-            every_ingredient_exists = await ingredient_exists(ingredients[i]);
-        }
+    all_ingredients_exist = all_ingredients_exist && (await Ingredient.find({ _id: { $in: ingredients_objid } })).length == ingredients.length;
     
-
-    if(!every_ingredient_exists)
-        return fail(res, 400, failMessage, "some ingredients do not exist");
+    if(!all_ingredients_exist)
+        return fail(400, "some ingredients do not exist");
 
     let img_buffer;
     if(typeof image === 'String') {
@@ -55,8 +52,8 @@ const createDish = async (req, res, next) => {
     const was_saved = (await document.save()) !== null;
     /* istanbul ignore next */
     if(!was_saved)
-        return fail(res, 500, failMessage, "internal server error");
-    res.status(201).send({ msg: "dish saved successfully" });
+        return fail(500, "internal server error");
+    res.status(201).send({ msg: "dish saved successfully", id: document._id });
 }
 
 const deleteDish = async (req, res, next) => {
@@ -66,12 +63,12 @@ const deleteDish = async (req, res, next) => {
     if (req.body == null || req.body.jwt_payload == null) //this should never happen since the API requires token checking 
         return fail(res, 400, failMessage, "req.body == null || req.body.token == null");
 
-    const name = req.body.name, owner_id = req.body.jwt_payload.user_id;
+    const _id = req.body.dish_id, owner_id = req.body.jwt_payload.user_id;
 
-    if(name == null)
-        return fail(res, 400, failMessage, "req.body.name == null");
+    if(_id == null)
+        return fail(400, "req.body.name == null");
 
-    let del_count = (await Dish.deleteOne({ owner_id, name })).deletedCount;
+    let del_count = (await Dish.deleteOne({ owner_id, _id })).deletedCount;
 
     if(del_count == 0)
         return fail(res, 400, failMessage, "no dish with such name");

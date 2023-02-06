@@ -12,7 +12,6 @@ const valid_document = {
     ingredients: [  ] //array of ids
 };
 const post_data = [
-    [ 201, valid_document ],
     [ 400, valid_document ],
     [ 400, { name: 'pizza margherita' } ],
     [ 400, { name: 'pizza sbagliata', ingredients: true } ],
@@ -22,7 +21,13 @@ const post_data = [
     [ 400, {} ],
     [ 400, null]
 ];
-const delete_data = post_data.map(a => a[0] == 201 ? [200, a[1]] : a);
+let delete_data = [
+    [ 200, undefined ], // later populated with valid document's _id
+    [ 400, undefined ], // later populated with valid document's _id
+    [ 400, { dish_id: "not an objid" } ],
+    [ 400, { dish_id: null } ],
+    [ 400, null ]
+];
 
 let post, del, jwt;
 describe(api_path, () => {
@@ -38,7 +43,10 @@ describe(api_path, () => {
             del(200, valid_document),
         ]);
     });
-
+    test("POST successful dish creation", async () => {
+        const dish_id = (await post(201, valid_document)).id;
+        delete_data[0][1] = delete_data[1][1] = { dish_id };
+    });
     test.each(post_data)("POST (dish creation) %d, %o", async (c,d) => await post(c,d));
 
     test.each(delete_data)("DELETE (dish deletion) %d, %o", async (c,d) => await del(c,d));

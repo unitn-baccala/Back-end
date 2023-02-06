@@ -1,5 +1,5 @@
 const request = require('./request'); //for http requests
-
+const Ingredient = require('../models/ingredient');
 const api_path = '/api/ingredient';
 
 const post = request.auth_post(api_path), del = request.auth_del(api_path);
@@ -27,12 +27,13 @@ describe('/api/authenticate', () => {
     test.each(invalid_credentials)("POST auth %d %o", async (c,d) => await request.post('/api/authenticate')(c,d));
 
     test("using bad jwt", async () => {
-        await del({token: "not really a jwt"})(403, valid_document);
+        await post({token: "not really a jwt"})(403, valid_document);
     });
 
     test("using jwt", async () => {
-        await Promise.allSettled([post(jwt)(201, valid_document)]);
-        await del(jwt)(200, valid_document);
+        await Ingredient.deleteOne(valid_document).exec();
+
+        await post(jwt)(201, valid_document);
     });
 
 

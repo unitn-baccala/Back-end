@@ -43,13 +43,13 @@ const createUser = async (req, res, next) => {
         return fail(400, "business name is taken")
 
     const password_hash = await argon2.hash(password);
-    const user = new User({ email, password_hash, business_name });
-    const user_was_saved = (await user.save()) !== null; 
+    const document = new User({ email, password_hash, business_name });
+    const user_was_saved = (await document.save()) !== null; 
     
     /* istanbul ignore next */
     if(!user_was_saved)
         return fail(500, "internal server error");
-    res.status(201).send({ msg: "user saved successfully" });
+    res.status(201).send({ msg: "user saved successfully", id: document._id});
 };
 
 // DELETE /api/user => deleteUser
@@ -84,8 +84,8 @@ const deleteUser = async (req, res, next) => {
         return fail(500, "internal server error");
 
 
-    Ingredient.deleteMany({ owner_id: user._id });
-    Dish.deleteMany({ owner_id: user._id });
+    await Ingredient.deleteMany({ owner_id: user._id });
+    await Dish.deleteMany({ owner_id: user._id });
     //Menu.deleteMany({ owner_id: user._id });
     //Category.deleteMany({ owner_id: user._id });
 
