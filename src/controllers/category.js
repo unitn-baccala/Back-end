@@ -37,12 +37,12 @@ const deleteCategory = async (req, res, next) => {
     if (req.body == null || req.body.jwt_payload == null) // the function is token checked so this cannot happen
         return fail(500, "req.body == null || req.body.token == null");
     
-    const name = req.body.name, owner_id = req.body.jwt_payload.user_id;
+    const _id = req.body.category_id, owner_id = req.body.jwt_payload.user_id;
 
-    if(name == null)
-        return fail(400, "req.body.name == null");
+    if(_id == null)
+        return fail(400, "req.body.category_id == null");
 
-    let del_count = (await Category.deleteOne({ name, owner_id })).deletedCount;
+    let del_count = (await Category.deleteOne({ _id, owner_id })).deletedCount;
     if(del_count == 0)
         return fail(400, "no category with such name");
 
