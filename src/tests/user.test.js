@@ -21,10 +21,10 @@ const post_data = [
     [ 400, { email: 'badem', password: 'PasswordSicura42' } ],
     [ 400, { password: 'PasswordSicura42' } ],
     [ 400, { password: 'badpw' } ],
-    [ 400, { email: 'giovanni.bianchi@example.com', business_name: 'Da Giovanni'} ],                            // no pw
-    [ 400, { email: 'giovanni.bianchi@example.com', business_name: 'Da Giovanni', password: 'badpw' } ],        // invalid pw
-    [ 400, { email: 'giovanni.bianchi@example.com', password: 'OttimaPassword1234' } ],                         // no business_name
-    [ 400, { email: 'giovanni.bianchi@example.com', password: 'OttimaPassword1234', business_name: 'Da Marco' } ],                         // no business_name
+    [ 400, { email: 'giovanni.bianchi@example.com', business_name: 'Da Giovanni'} ],                                // no pw
+    [ 400, { email: 'giovanni.bianchi@example.com', business_name: 'Da Giovanni', password: 'badpw' } ],            // invalid pw
+    [ 400, { email: 'giovanni.bianchi@example.com', password: 'OttimaPassword1234' } ],                             // no business_name
+    [ 400, { email: 'giovanni.bianchi@example.com', password: 'OttimaPassword1234', business_name: 'Da Marco' } ],  // business_name taken
 ];
 const delete_data = (
     [
@@ -48,7 +48,9 @@ describe(api_path, () => {
         ]);
         
     });
+
     test.each(post_data)('POST (account registration) %d, %o', async (c,d) => await post(c,d));
+
     test.each(delete_data)('DELETE (account deletion) %d, %o', async (c,d) => await del(jwt)(c,d));
     
     afterAll(async () => {
