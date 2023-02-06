@@ -5,5 +5,6 @@ const tokenChecker = require('../functions/tokenChecker')
 
 router.post('/dish', tokenChecker, controller.createDish);
 router.delete('/dish', tokenChecker, controller.deleteDish);
+router.get('/dish', controller.getDishes);
 
 module.exports = router;
