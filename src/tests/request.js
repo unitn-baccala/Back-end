@@ -9,6 +9,9 @@ const test_credentials = {
     password: "PasswordSicura23",
     business_name: "Nome Ristorante Test",
 };
+//"owner_id": "63e1272db590ba7110e19bbc"
+//"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjNlMTI3MmRiNTkwYmE3MTEwZTE5YmJjIiwiaWF0IjoxNjc1NzAxNDA4LCJleHAiOjE2NzU3ODc4MDh9.b_oid4BNGtOikTJGih4KX7bezQx0FxcS6JiiTKuhUB8"
+
 // creates the user if it does not exist, then returns its jwt
 const init_test_auth = async () => {
     await Promise.allSettled([

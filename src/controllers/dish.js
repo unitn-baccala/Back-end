@@ -12,7 +12,7 @@ const createDish = async (req, res, next) => {
         return fail(400, "req.body == null || req.token == null")
         
     const owner_id = req.body.jwt_payload.user_id, name = req.body.name;
-    const description = req.body.description, image = req.body.image, ingredients = req.body.ingredients;
+    const description = req.body.description, image = req.body.image, ingredients = req.body.ingredients, categories = req.body.categories;
 
     if(name == null || String(name).length < 1)
         return fail(400, "invalid name");
@@ -52,7 +52,7 @@ const createDish = async (req, res, next) => {
         }
     }
     
-    const document = new Dish({ owner_id, name, description, img_buffer, ingredients });
+    const document = new Dish({ owner_id, name, description, img_buffer, ingredients, categories }); //implementare tutti i controlli sulle categorie
     const was_saved = (await document.save()) !== null;
     /* istanbul ignore next */
     if(!was_saved)
@@ -82,5 +82,31 @@ const deleteDish = async (req, res, next) => {
     res.status(200).send({ msg: "dish deleted successfully" });
 }
 
+const getDishes = async (req, res, next) => {
+    if (req.query == null) {
+        res.status(400).send({ msg: "no parameters"});
+        return;
+    }
+    
+    const business_name = req.query.business_name;
+
+    if(business_name == null)
+        res.status(400).send({ msg: "no business name specified" });
+    else {
+        const user = await User.findOne({business_name});
+        if(!user) {
+            res.status(400).send({ msg: "no such business name found" });
+            return;
+        }
+
+        const ingredients = await Ingredient.find({ owner_id: user._id });
+
+        if (ingredients) {
+            res.status(200).send(ingredients);
+        } else {
+            res.status(400).send({ msg: "no ingredients found" });
+        }
+    }
+}
 
 module.exports = { createDish, deleteDish };

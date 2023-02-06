@@ -76,5 +76,4 @@ const getIngredients = async (req, res, next) => {
     res.status(200).send(ingredients);
 }
 
-
 module.exports = { createIngredient, deleteIngredient, getIngredients };

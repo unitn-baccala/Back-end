@@ -21,6 +21,10 @@ const schema = new mongoose.Schema({
         type: Array, // array of ObjectIds
         required: false
     },
+    categories: {
+        type: Array,
+        required: true
+    }
 }, { versionKey: false });
 
 const Dish = mongoose.model("Dish", schema);
