@@ -9,6 +9,7 @@ const authenticate = require('./routes/authenticate');
 const user = require('./routes/user');
 const ingredient = require('./routes/ingredient');
 const dish = require('./routes/dish');
+const category = require('./routes/category');
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("../openapi.json");
 
@@ -43,5 +44,6 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/', user);
 app.use('/api/', ingredient);
 app.use('/api/', dish);
+app.use('/api/', category)
 
 module.exports = { server };
