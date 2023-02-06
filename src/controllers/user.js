@@ -2,12 +2,12 @@ const User = require('../models/user');
 const argon2 = require('argon2');
 const Ingredient = require('../models/ingredient');
 const Dish = require('../models/dish');
+const failHandler = require('../functions/fail');
 
 // POST /api/user => createUser
 const createUser = async (req, res, next) => {
-    const fail = (code, msg) => {
-        res.status(code).send({ msg: "failed to create user: " + msg });
-    };
+    const fail = failHandler(res, "failed to create user: ");
+
     if(req.body == null)
         return fail(400, "req.body == null");
 
@@ -54,9 +54,7 @@ const createUser = async (req, res, next) => {
 
 // DELETE /api/user => deleteUser
 const deleteUser = async (req, res, next) => {
-    const fail = (code, msg) => {
-        res.status(code).send({ msg: "failed to delete user: " + msg });
-    };
+    const fail = failHandler(res, "failed to delete user: ");
 
     /* istanbul ignore next */
     if(req.body == null || req.body.jwt_payload == null)

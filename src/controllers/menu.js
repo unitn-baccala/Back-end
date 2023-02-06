@@ -1,11 +1,10 @@
 const Menu = require('../models/menu')
 const Dish = require('../models/dish');
 const ObjectId = require('mongoose').Types.ObjectId;
-// POST /menu => createMenu
+const failHandler = require('../functions/fail');
+
 const createMenu = async (req, res, next) => {
-    const fail = (code, msg) => {
-        res.status(code).send({msg: "failed to create menu: " + msg});
-    };
+    const fail = failHandler(res, "failed to create menu: ");
 
     /* istanbul ignore next */
     if (req.body == null || req.body.jwt_payload == null) //this should never happen since the API requires token checking 
@@ -51,9 +50,7 @@ const createMenu = async (req, res, next) => {
 }
 
 const deleteMenu = async (req, res, next) => {
-    const fail = (code, msg) => {
-        res.status(code).send({msg: "failed to delete menu: " + msg});
-    };
+    const fail = failHandler(res, "failed to delete menu: ");
 
     /* istanbul ignore next */
     if (req.body == null || req.body.jwt_payload == null) //this should never happen since the API requires token checking 
@@ -73,20 +70,20 @@ const deleteMenu = async (req, res, next) => {
 }
 
 const getMenues = async (req, res, next) => {
+    const fail = failHandler(res, "failed to get menus: ");
+
     if (req.query == null) {
-        res.status(400).send({ msg: "no parameters"});
-        return;
+        return fail(400, "no parameters");
     }
     
     const business_name = req.query.business_name;
 
     if(business_name == null)
-        res.status(400).send({ msg: "no business name specified" });
+        return fail(400, "no business name specified");
     else {
         const user = await User.findOne({business_name});
         if(!user) {
-            res.status(400).send({ msg: "no such business name found" });
-            return;
+            return fail(400, "no such business name found");
         }
 
         const dishes = await Dish.find({ owner_id: user._id });
@@ -94,9 +91,9 @@ const getMenues = async (req, res, next) => {
         if (dishes) {
             res.status(200).send(dishes);
         } else {
-            res.status(400).send({ msg: "no dishes found" });
+            return fail(400, "no dishes found");
         }
     }
 }
 
-module.exports = { createMenu, deleteMenu };
+module.exports = { createMenu, deleteMenu, getMenues };
