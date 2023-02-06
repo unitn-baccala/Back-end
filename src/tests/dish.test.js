@@ -9,14 +9,14 @@ let server, mongoose;
 const valid_document = { 
     name: 'pizza margherita',
     description: 'our italian chef\'s favourite',
-    ingredients: [ '63dff59904e85f8fab19c3fe', '63dff59904e85f8fab19c401', '63dff59904e85f8fab19c404' ] 
+    ingredients: [  ] //array of ids
 };
 const post_data = [
     [ 201, valid_document ],
     [ 400, valid_document ],
     [ 400, { name: 'pizza margherita' } ],
     [ 400, { name: 'pizza sbagliata', ingredients: true } ],
-    [ 400, { name: 'pizza impossibile', ingredients: [ 'arcobaleno', 'scaglie di drago' ] } ],
+    [ 400, { name: 'pizza impossibile', ingredients: [ 'non un ObjectId', 'arcobaleno', 'scaglie di drago' ] } ],
     [ 400, { name: '' } ],
     [ 400, { name: null } ],
     [ 400, {} ],
@@ -33,15 +33,16 @@ describe(api_path, () => {
         jwt = await request.init_test_auth();
         post = auth_post(jwt);
         del = auth_del(jwt);
+
         await Promise.allSettled([
             del(200, valid_document),
         ]);
     });
     post_data.forEach((e) => {
-        test("POST (dish creation)" + JSON.stringify(e), () => post(e[0], e[1]));
+        test("POST (dish creation)" + JSON.stringify(e), async () => await post(e[0], e[1]));
     });
     delete_data.forEach((e) => {
-        test("DELETE (dish deletion)" + JSON.stringify(e), () => del(e[0], e[1]));
+        test("DELETE (dish deletion)" + JSON.stringify(e), async () => await del(e[0], e[1]));
     });
     //test.each(delete_data)("DELETE (dish deletion) %d, %o", del);
     

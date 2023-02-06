@@ -1,9 +1,9 @@
 const bent = require('bent');
+const socket = 'http://localhost:3000';
+const make_method = method => path => async (code, data) => await bent(socket, method, 'json', code) (path, data);
+const post = make_method('POST'), del = make_method('DELETE'), get = make_method('GET');
 
-const make_method = method => path => (code, data) => bent('http://localhost:3000', method, 'json', code) (path, data);
-const post = make_method('POST'), del = make_method('DELETE');
-
-const authenticate = data => bent('http://localhost:3000', 'POST', 'json', 200) ('/api/authenticate', data);
+const authenticate = data => bent(socket, 'POST', 'json', 200) ('/api/authenticate', data);
 const test_credentials = {
     email: "test.user@for.tests.com",
     password: "PasswordSicura23",
@@ -16,8 +16,7 @@ const init_test_auth = async () => {
     ]);
     return await authenticate(test_credentials);
 };
-
-const make_auth_method = method => path => jwt => (code, data) => bent('http://localhost:3000', method, 'string', code) (path, {...data, ...jwt});
+const make_auth_method = method => path => jwt => async (code, data) => bent(socket, method, 'json', code) (path, {...data, ...jwt});
 const auth_post = make_auth_method('POST'), auth_del = make_auth_method('DELETE');
 
-module.exports = { post, del, init_test_auth, auth_post, auth_del, test_credentials };
+module.exports = { post, del, get, init_test_auth, auth_post, auth_del, test_credentials };

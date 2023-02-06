@@ -4,8 +4,7 @@ const api_path = '/api/ingredient';
 
 const post = request.auth_post(api_path), del = request.auth_del(api_path);
 
-let server, mongoose;
-let jwt;
+let server, mongoose, jwt;
 
 const valid_document = { name: 'EXAMPLE INGREDIENT NAME' };
 const invalid_credentials = [
@@ -18,7 +17,6 @@ describe('/api/authenticate', () => {
         let app = require("../app");
         server = app.server;
         mongoose = require('mongoose');
-        await app.mongodb_connection_promise;
     });
 
     test("POST auth", async () => {

@@ -39,6 +39,7 @@ describe(api_path, () => {
     });
     test("POST (ingredient creation) without auth", () => request.post("/api/ingredient")(401, valid_document));
     test("POST (ingredient creation) without auth, null body", () => request.post("/api/ingredient")(401, null));
+    test("GET (ingredient read)", () => request.get("/api/ingredient?business_name=Nome Ristorante Test")(200, null));
     //test.each(delete_data)("DELETE (ingredient deletion) %d, %o", del);
     
 
