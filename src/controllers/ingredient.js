@@ -56,13 +56,12 @@ const getIngredients = async (req, res, next) => {
         return;
     }
     
-    const parameters = req.params;
-    const name = parameters.business_name
+    const business_name = req.params.business_name;
 
-    if(name == null)
+    if(business_name == null)
         res.status(400).send({ msg: "no business_name specified" });
     else {
-        const ingredients = await Ingredient.find({ name });
+        const ingredients = await Ingredient.find({ business_name });
 
         if (ingredients) {
             res.status(200).send(ingredients);

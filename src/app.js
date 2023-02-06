@@ -34,9 +34,11 @@ const server = app.listen(port, () => {
 
 app.use(cors()); //accept request from everywhere on all routes
 
+//routes without protection
 app.use('/api/', authentication);
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+//protected routes with exceptions
 app.use('/api/', user);
 app.use('/api/', ingredient);
 app.use('/api/', dish);
