@@ -8,7 +8,7 @@ const createIngredient = async (req, res, next) => {
         return;
     }
 
-    const name = req.body.name, owner_id = req.body.jwt_payload.user_id; 
+    const name = req.body.name, owner_id = req.body.jwt_payload.user_id;
     if(name == null || String(name).length < 1) {
         res.status(400).send({ msg: "failed to create ingredient: invalid name" });
         return;
@@ -77,6 +77,5 @@ const getIngredients = async (req, res, next) => {
         }
     }
 }
-
 
 module.exports = { createIngredient, deleteIngredient, getIngredients };
