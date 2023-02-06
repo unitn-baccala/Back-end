@@ -4,8 +4,7 @@ const api_path = '/api/ingredient';
 
 const post = request.auth_post(api_path), del = request.auth_del(api_path);
 
-let server, mongoose;
-let jwt;
+let server, mongoose, jwt;
 
 const valid_document = { name: 'EXAMPLE INGREDIENT NAME' };
 const invalid_credentials = [
@@ -18,21 +17,15 @@ describe('/api/authenticate', () => {
         let app = require("../app");
         server = app.server;
         mongoose = require('mongoose');
-        await app.mongodb_connection_promise;
     });
 
     test("POST auth", async () => {
         jwt = await request.init_test_auth();
     });
 
-    invalid_credentials.forEach(([code, data]) => {
-        test("POST auth (" + code +")" + JSON.stringify(data), async () => {
-            await request.post('/api/authenticate')(code, data);
-        })
-    });
+    test.each(invalid_credentials)("POST auth %d %o", async (c,d) => await request.post('/api/authenticate')(c,d));
 
     test("using bad jwt", async () => {
-        await Promise.allSettled([post(jwt)(201, valid_document)]);
         await del({token: "not really a jwt"})(403, valid_document);
     });
 

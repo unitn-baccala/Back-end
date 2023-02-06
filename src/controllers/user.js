@@ -59,19 +59,17 @@ const deleteUser = async (req, res, next) => {
 
     if(req.body == null)
         return fail(400, "req.body == null");
-    /*if(req.body.jwt_payload == null)
+    if(req.body.jwt_payload == null)
         return fail(400, "req.body.token == null");
-    */
+    
 
-    console.log("body !null");
-    const email = req.body.email, password = req.body.password/*, user_id = req.body.jwt_payload.user_id*/;
+    const email = req.body.email, password = req.body.password, user_id = req.body.jwt_payload.user_id;
     
     if(email == null) 
         return fail(400, "req.body.email == null");
     if(password == null) 
         return fail(400, "req.body.password == null");
-    const user = await User.findOne({ /*_id: user_id,*/ email }).exec();
-    console.log("email & pw !null");
+    const user = await User.findOne({ id: user_id, email }).exec();
     if(user === null)
         return fail(400, "no user with such credentials");
     const password_is_correct = await argon2.verify(user.password_hash, password);
