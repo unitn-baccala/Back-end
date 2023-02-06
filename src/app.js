@@ -5,7 +5,7 @@ const cors = require('cors')
 
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', true);
-const authentication = require('./routes/authentication');
+const authenticate = require('./routes/authenticate');
 const user = require('./routes/user');
 const ingredient = require('./routes/ingredient');
 const dish = require('./routes/dish');
@@ -16,7 +16,7 @@ const app = express();
 app.use(express.json());
 const port = 3000;
 
-let mongodb_connection_promise = mongoose.connect(
+mongoose.connect(
     process.env.MONGODB_URI,
     { useNewUrlParser: true, useUnifiedTopology: true },
     (err) => {
@@ -35,7 +35,7 @@ const server = app.listen(port, () => {
 app.use(cors()); //accept request from everywhere on all routes
 
 //routes without protection
-app.use('/api/', authentication);
+app.use('/api/', authenticate);
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 //protected routes with exceptions
@@ -43,4 +43,4 @@ app.use('/api/', user);
 app.use('/api/', ingredient);
 app.use('/api/', dish);
 
-module.exports = { server, mongodb_connection_promise };
+module.exports = { server };

@@ -1,4 +1,5 @@
-const Ingredient = require('../models/ingredient')
+const Ingredient = require('../models/ingredient');
+const User = require('../models/user');
 
 // POST /ingredient => createIngredient
 const createIngredient = async (req, res, next) => { 
@@ -51,17 +52,23 @@ const deleteIngredient = async (req, res, next) => {
 }
 
 const getIngredients = async (req, res, next) => {
-    if (req.params == null) {
+    if (req.query == null) {
         res.status(400).send({ msg: "no parameters"});
         return;
     }
     
-    const business_name = req.params.business_name;
+    const business_name = req.query.business_name;
 
     if(business_name == null)
-        res.status(400).send({ msg: "no business_name specified" });
+        res.status(400).send({ msg: "no business name specified" });
     else {
-        const ingredients = await Ingredient.find({ business_name });
+        const user = await User.findOne({business_name});
+        if(!user) {
+            res.status(400).send({ msg: "no such business name found" });
+            return;
+        }
+
+        const ingredients = await Ingredient.find({ owner_id: user._id });
 
         if (ingredients) {
             res.status(200).send(ingredients);

@@ -30,7 +30,7 @@ const createDish = async (req, res, next) => {
 
     const ingredient_exists = async _id => {
         try {
-            return (await Ingredient.findOne({ owner_id, _id: new ObjectId(_id) }).exec()) !== null;
+            return (await Ingredient.findOne({ owner_id, _id }).exec()) !== null;
         } catch(e) {
             return false;
         }
@@ -41,13 +41,11 @@ const createDish = async (req, res, next) => {
         for(let i = 0; i < ingredients.length && every_ingredient_exists; i++) {
             try {
                 every_ingredient_exists = await ingredient_exists(ingredients[i]);
-                console.log(ingredients[i], "exists?", every_ingredient_exists);
             } catch (e) {
                 every_ingredient_exists = false;
                 continue;
             }
         }
-    console.log("every_ingredient_exists", every_ingredient_exists);
     
 
     if(!every_ingredient_exists) {
