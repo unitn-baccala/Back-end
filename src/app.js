@@ -10,11 +10,12 @@ const user = require('./routes/user');
 const ingredient = require('./routes/ingredient');
 const dish = require('./routes/dish');
 const category = require('./routes/category');
+const menu = require('./routes/menu');
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("../openapi.json");
 
 const app = express();
-app.use(express.json());
+app.use(express.json({limit: '5mb'}));
 const port = 3000;
 
 mongoose.connect(
@@ -44,6 +45,7 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/', user);
 app.use('/api/', ingredient);
 app.use('/api/', dish);
-app.use('/api/', category)
+app.use('/api/', category);
+app.use('/api/', menu);
 
 module.exports = { server };
