@@ -1,30 +1,29 @@
 const Dish = require('../models/dish');
 const User = require('../models/user');
 const Ingredient = require('../models/ingredient');
-const ObjectId = require('mongoose').Types.ObjectId;
+const fail = require('../functions/fail');
+
 // POST /dish => createDish
 const createDish = async (req, res, next) => {
-    const fail = (code, msg) => {
-        res.status(code).send({msg: "failed to create dish: " + msg});
-    };
+    const failMessage = "failed to create dish: "
 
     /* istanbul ignore next */
     if (req.body == null || req.body.jwt_payload == null) //this should never happen since the API requires token checking 
-        return fail(400, "req.body == null || req.token == null")
+        return fail(400, failMessage, "req.body == null || req.token == null")
         
     const owner_id = req.body.jwt_payload.user_id, name = req.body.name;
     const description = req.body.description, image = req.body.image, ingredients = req.body.ingredients, categories = req.body.categories;
 
     if(name == null || String(name).length < 1)
-        return fail(400, "invalid name");
+        return fail(400, failMessage, "invalid name");
 
     if(ingredients != null && !Array.isArray(ingredients))
-        return fail(400, "failed to create dish: invalid 'ingredients' parameter" );
+        return fail(400, failMessage, "failed to create dish: invalid 'ingredients' parameter" );
 
     const found = (await Dish.findOne({ owner_id, name }).exec()) !== null;
 
     if(found)
-        return fail(400, "name taken");
+        return fail(400, failMessage, "name taken");
 
     const ingredient_exists = async _id => {
         try {
@@ -42,14 +41,14 @@ const createDish = async (req, res, next) => {
     
 
     if(!every_ingredient_exists)
-        return fail(400, "some ingredients do not exist");
+        return fail(400, failMessage, "some ingredients do not exist");
 
     let img_buffer;
     if(typeof image === 'String') {
         try {
             img_buffer = Buffer.from(image, 'base64');
         } catch(e) {
-            return fail(400, "failed to convert image from base64");
+            return fail(400, failMessage, "failed to convert image from base64");
         }
     }
     
@@ -57,47 +56,45 @@ const createDish = async (req, res, next) => {
     const was_saved = (await document.save()) !== null;
     /* istanbul ignore next */
     if(!was_saved)
-        return fail(500, "internal server error");
+        return fail(500, failMessage, "internal server error");
     res.status(201).send({ msg: "dish saved successfully" });
 }
 
 const deleteDish = async (req, res, next) => {
-    const fail = (code, msg) => {
-        res.status(code).send({msg: "failed to delete dish: " + msg});
-    };
+    const failMessage = "failed to delete dish: "
 
     /* istanbul ignore next */
     if (req.body == null || req.body.jwt_payload == null) //this should never happen since the API requires token checking 
-        return fail(400, "req.body == null || req.body.token == null");
+        return fail(400, failMessage, "req.body == null || req.body.token == null");
 
     const name = req.body.name, owner_id = req.body.jwt_payload.user_id;
 
     if(name == null)
-        return fail(400, "req.body.name == null");
+        return fail(400, failMessage, "req.body.name == null");
 
     let del_count = (await Dish.deleteOne({ owner_id, name })).deletedCount;
 
     if(del_count == 0)
-        return fail(400, "no dish with such name");
+        return fail(400, failMessage, "no dish with such name");
 
     res.status(200).send({ msg: "dish deleted successfully" });
 }
 
 const getDishes = async (req, res, next) => {
+    const failMessage = "failed to get dishes: "
+    
     if (req.query == null) {
-        res.status(400).send({ msg: "no parameters"});
-        return;
+        return fail(400, failMessage, "no parameters");
     }
     
     const business_name = req.query.business_name;
 
     if(business_name == null)
-        res.status(400).send({ msg: "no business name specified" });
+        return fail(400, failMessage, "no business name specified");
     else {
         const user = await User.findOne({business_name});
         if(!user) {
-            res.status(400).send({ msg: "no such business name found" });
-            return;
+            return fail(400, failMessage, "no such business name found");
         }
 
         const dishes = await Dish.find({ owner_id: user._id });
@@ -105,7 +102,7 @@ const getDishes = async (req, res, next) => {
         if (dishes) {
             res.status(200).send(dishes);
         } else {
-            res.status(400).send({ msg: "no dishes found" });
+            fail(400, failMessage, "no dishes found");
         }
     }
 }
