@@ -6,7 +6,6 @@ const cors = require('cors')
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', true);
 const authentication = require('./routes/authentication');
-const tokenChecker = require('./functions/tokenChecker');
 const user = require('./routes/user');
 const ingredient = require('./routes/ingredient');
 const dish = require('./routes/dish');
@@ -33,12 +32,12 @@ const server = app.listen(port, () => {
     `Docs available at http://localhost:${port}/api-docs`);
 });
 
+app.use(cors()); //accept request from everywhere on all routes
+
 app.use('/api/', authentication);
-app.use('/api/', cors(), user);
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.use(tokenChecker);
-
+app.use('/api/', user);
 app.use('/api/', ingredient);
 app.use('/api/', dish);
 
