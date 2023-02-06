@@ -50,9 +50,9 @@ const createUser = async (req, res, next) => {
         email, password_hash: await argon2.hash(password), business_name
     });
 
-    const wasSaved = (await user.save()) !== null;
+    const was_saved = (await user.save()) !== null;
     
-    if (wasSaved) {
+    if (was_saved) {
         res.status(201).send({ msg: "user saved successfully" });
     } else {
         res.status(500).send({ msg: "failed to create user: internal server error" });
@@ -66,7 +66,7 @@ const deleteUser = async (req, res, next) => {
     if(email == null || password == null)
         res.status(400).send({ msg: "failed to delete user: (req.body.)email == null || password == null" });
     else {
-        const user = await User.findOne({ email }).exec()
+        const user = await User.findOne({ email }).exec();
     
         if(user !== null && await argon2.verify(user.password_hash, password)) {
             let del_count = (await User.deleteOne({ email, password_hash: user.password_hash })).deletedCount;

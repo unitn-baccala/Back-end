@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
 const schema = new mongoose.Schema({
-    owner_email: {
-        type: String,
+    owner_id: {
+        type: mongoose.Schema.Types.ObjectId,
         required: true
     },
     name: {
@@ -18,7 +18,7 @@ const schema = new mongoose.Schema({
         required: false,
     },
     ingredients: {
-        type: Array,
+        type: Array, // array of ObjectIds
         required: false
     },
 }, { versionKey: false });

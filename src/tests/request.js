@@ -20,4 +20,4 @@ const init_test_auth = async () => {
 const make_auth_method = method => path => jwt => (code, data) => bent('http://localhost:3000', method, 'string', code) (path, {...data, ...jwt});
 const auth_post = make_auth_method('POST'), auth_del = make_auth_method('DELETE');
 
-module.exports = { post, del, init_test_auth, auth_post, auth_del };
+module.exports = { post, del, init_test_auth, auth_post, auth_del, test_credentials };
