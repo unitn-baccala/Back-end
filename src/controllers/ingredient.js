@@ -27,7 +27,7 @@ const createIngredient = async (req, res, next) => {
     if(!was_saved)
         return fail(500, "internal server error")
 
-    res.status(201).send({ msg: "ingredient saved successfully" });
+    res.status(201).send({ msg: "ingredient saved successfully" , id: document._id });
 }
 
 //TODO: should be checking if the ingredients is used in any dishes
@@ -40,12 +40,12 @@ const deleteIngredient = async (req, res, next) => {
     if (req.body == null || req.body.jwt_payload == null) // the function is token checked so this cannot happen
         return fail(500, "req.body == null || req.body.token == null");
     
-    const name = req.body.name, owner_id = req.body.jwt_payload.user_id;
+    const _id = req.body.ingredient_id, owner_id = req.body.jwt_payload.user_id;
 
-    if(name == null)
-        return fail(400, "req.body.name == null");
+    if(_id == null)
+        return fail(400, "req.body.ingredient_id == null");
 
-    let del_count = (await Ingredient.deleteOne({ name, owner_id })).deletedCount;
+    let del_count = (await Ingredient.deleteOne({ _id, owner_id })).deletedCount;
     if(del_count == 0)
         return fail(400, "no ingredient with such name");
 

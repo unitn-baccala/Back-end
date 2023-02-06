@@ -84,8 +84,8 @@ const deleteUser = async (req, res, next) => {
         return fail(500, "internal server error");
 
 
-    Ingredient.deleteMany({ owner_id: user._id });
-    Dish.deleteMany({ owner_id: user._id });
+    await Ingredient.deleteMany({ owner_id: user._id });
+    await Dish.deleteMany({ owner_id: user._id });
     //Menu.deleteMany({ owner_id: user._id });
     //Category.deleteMany({ owner_id: user._id });
 

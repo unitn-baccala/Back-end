@@ -47,7 +47,7 @@ const createMenu = async (req, res, next) => {
     /* istanbul ignore next */
     if(!was_saved)
         return fail(500, "internal server error");
-    res.status(201).send({ msg: "menu saved successfully" });
+    res.status(201).send({ msg: "menu saved successfully", id: document._id });
 }
 
 const deleteMenu = async (req, res, next) => {
@@ -59,12 +59,12 @@ const deleteMenu = async (req, res, next) => {
     if (req.body == null || req.body.jwt_payload == null) //this should never happen since the API requires token checking 
         return fail(400, "req.body == null || req.body.token == null");
 
-    const name = req.body.name, owner_id = req.body.jwt_payload.user_id;
+    const _id = req.body.menu_id, owner_id = req.body.jwt_payload.user_id;
 
-    if(name == null)
+    if(_id == null)
         return fail(400, "req.body.name == null");
 
-    let del_count = (await Menu.deleteOne({ owner_id, name })).deletedCount;
+    let del_count = (await Menu.deleteOne({ owner_id, _id })).deletedCount;
 
     if(del_count == 0)
         return fail(400, "no menu with such name");

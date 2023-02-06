@@ -50,13 +50,11 @@ const createDish = async (req, res, next) => {
     }
     
     const document = new Dish({ owner_id, name, description, img_buffer, ingredients, categories }); //implementare tutti i controlli sulle categorie
-    console.log(document._id);
     const was_saved = (await document.save()) !== null;
-    console.log(document._id);
     /* istanbul ignore next */
     if(!was_saved)
         return fail(500, "internal server error");
-    res.status(201).send({ msg: "dish saved successfully" });
+    res.status(201).send({ msg: "dish saved successfully", id: document._id });
 }
 
 const deleteDish = async (req, res, next) => {
@@ -68,12 +66,12 @@ const deleteDish = async (req, res, next) => {
     if (req.body == null || req.body.jwt_payload == null) //this should never happen since the API requires token checking 
         return fail(400, "req.body == null || req.body.token == null");
 
-    const name = req.body.name, owner_id = req.body.jwt_payload.user_id;
+    const _id = req.body.dish_id, owner_id = req.body.jwt_payload.user_id;
 
-    if(name == null)
+    if(_id == null)
         return fail(400, "req.body.name == null");
 
-    let del_count = (await Dish.deleteOne({ owner_id, name })).deletedCount;
+    let del_count = (await Dish.deleteOne({ owner_id, _id })).deletedCount;
 
     if(del_count == 0)
         return fail(400, "no dish with such name");
