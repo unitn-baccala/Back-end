@@ -1,23 +1,28 @@
-const validateObjectIds = async (arr, MongooseModel) => {
-    let objids = [];
-    let all_convertible_to_objid = objids.every(objid => {
-        try {
-            objids.push(ObjectId(objid));
-            return true;
-        } catch (e) {
-            return false;
-        }
-    });
+const ObjectId = require('mongoose').Types.ObjectId;
 
-    
-    if(!all_convertible_to_objid)
+const validateObjectIds = async (arr, MongooseModel) => {
+    if (arr == null) 
+        return [];
+    let objids = [];
+
+    for(let i = 0; i < arr.length; i++) {
+        try{
+            objids.push(ObjectId(arr[i]));
+        } catch(e) {}
+    }
+    const all_converted_to_objid = objids.length == arr.length;
+
+    if(!all_converted_to_objid)
         return null;
     
-    const existing_elems = await MongooseModel.find({ _id: { $in: objids } });
+    const existing_elems = await MongooseModel.find({ _id: { $in: objids } }).exec();
 
-    let all_exist = all_convertible_to_objid && objids.length == objids.length;
+    let all_exist = existing_elems.length == objids.length;
 
-    return all_exist ? objids : null;
+    if(!all_exist)
+        return null;
+    
+    return objids;
 };
 
 module.exports = validateObjectIds;
