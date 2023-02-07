@@ -11,13 +11,14 @@ let server, mongoose;
 let valid_document = {
     name: 'pizza margherita',
     description: 'our italian chef\'s favourite',
-    ingredients: [  ] //array of ids
+    ingredients: [  ] //later_populated
 };
 const post_data = [
     [ 400, valid_document ],
     [ 400, { name: 'pizza margherita' } ],
     [ 400, { name: 'pizza sbagliata', ingredients: true } ],
     [ 400, { name: 'pizza impossibile', ingredients: [ 'non un ObjectId', 'arcobaleno', 'scaglie di drago' ] } ],
+    [ 400, { name: 'pizza con objid inesistente', ingredients: [ '63e1272db590ba7110e19bbc' ] } ],
     [ 400, { name: '' } ],
     [ 400, { name: null } ],
     [ 400, {} ],
