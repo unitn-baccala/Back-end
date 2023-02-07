@@ -7,7 +7,8 @@ const failHandler = require('../functions/fail');
 const createUser = async (req, res, next) => {
     const fail = failHandler(res, "failed to create user: ");
 
-    if(req.body == null)
+    /* istanbul ignore next */
+    if(req.body == null) //req.body can be empty but not null so this should not happen
         return fail(400, "req.body == null");
 
     const password = req.body.password;
