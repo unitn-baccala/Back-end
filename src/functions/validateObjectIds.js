@@ -15,7 +15,7 @@ const validateObjectIds = async (arr, MongooseModel) => {
     
     const existing_elems = await MongooseModel.find({ _id: { $in: objids } });
 
-    let all_exist = all_convertible_to_objid && .length == objids.length;
+    let all_exist = all_convertible_to_objid && objids.length == objids.length;
 
     return all_exist ? objids : null;
 };
