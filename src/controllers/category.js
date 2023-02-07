@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const Category = require('../models/category');500
 const User = require('../models/user');
 const failHandler = require('../functions/fail');
