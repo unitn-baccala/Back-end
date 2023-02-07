@@ -26,8 +26,7 @@
         "tags": [
           "user"
         ],
-        "summary": "Create user",
-        "operationId": "createUser",
+        "summary": "Create a new user",
         "requestBody": {
           "content": {
             "application/json": {
@@ -43,7 +42,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/apiResponse"
+                  "$ref": "#/components/schemas/apiPostResponse"
                 },
                 "example": {
                   "msg": "user saved successfully",
@@ -63,14 +62,7 @@
             }
           },
           "500": {
-            "description": "internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/apiResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/internalServerError"
           }
         }
       },
@@ -83,8 +75,7 @@
             "httpBearerAuth": []
           }
         ],
-        "summary": "Delete user",
-        "operationId": "deleteUser",
+        "summary": "Delete a user",
         "responses": {
           "200": {
             "description": "user deleted successfully",
@@ -94,21 +85,17 @@
                   "$ref": "#/components/schemas/apiResponse"
                 },
                 "example": {
-                  "msg": "user deleted successfully",
-                  "id": "some_alphanumeric_id_24"
+                  "msg": "user deleted successfully"
                 }
               }
             }
           },
           "400": {
-            "description": "user deleted successfully",
+            "description": "failed to delete user",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/apiResponse"
-                },
-                "example": {
-                  "msg": "informational message"
                 }
               }
             }
@@ -124,8 +111,12 @@
         "tags": [
           "ingredient"
         ],
+        "security": [
+          {
+            "httpBearerAuth": []
+          }
+        ],
         "summary": "Create a new ingredient",
-        "operationId": "createIngredient",
         "requestBody": {
           "content": {
             "application/json": {
@@ -141,7 +132,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Response"
+                  "$ref": "#/components/schemas/apiPostResponse"
                 },
                 "example": {
                   "msg": "ingredient saved successfully",
@@ -151,24 +142,17 @@
             }
           },
           "400": {
-            "description": "failed to create ingredient: ",
+            "description": "failed to create ingredient",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseWithNoId"
+                  "$ref": "#/components/schemas/apiResponse"
                 }
               }
             }
           },
           "500": {
-            "description": "internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerErrorResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/internalServerError"
           }
         }
       },
@@ -176,15 +160,19 @@
         "tags": [
           "ingredient"
         ],
+        "security": [
+          {
+            "httpBearerAuth": []
+          }
+        ],
         "summary": "Delete an ingredient",
-        "operationId": "deleteIngredient",
         "responses": {
           "200": {
             "description": "ingredient deleted successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseWithNoId"
+                  "$ref": "#/components/schemas/apiResponse"
                 },
                 "example": {
                   "msg": "ingredient deleted successfully"
@@ -193,24 +181,17 @@
             }
           },
           "400": {
-            "description": "failed to delete ingredient: ",
+            "description": "failed to delete ingredient",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseWithNoId"
+                  "$ref": "#/components/schemas/apiResponse"
                 }
               }
             }
           },
           "500": {
-            "description": "internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerErrorResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/internalServerError"
           }
         }
       },
@@ -219,7 +200,6 @@
           "ingredient"
         ],
         "summary": "Retrieve a user's ingredients",
-        "operationId": "getIngredients",
         "parameters": [
           {
             "name": "business_name",
@@ -237,18 +217,22 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "title": "IngredientsArray",
                   "type": "array",
                   "items": {
                     "type": "object",
                     "properties": {
+                      "id": {
+                        "type": "string",
+                        "example": "some_alphanumeric_id_24"
+                      },
                       "owner_id": {
+                        "type": "string",
                         "example": "some_alphanumeric_id_24"
                       },
                       "name": {
-                        "example": "prova"
-                      },
-                      "id": {
-                        "example": "some_alphanumeric_id_24"
+                        "type": "string",
+                        "example": "onions"
                       }
                     }
                   }
@@ -261,186 +245,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseWithNoId"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
                   "$ref": "#/components/schemas/apiResponse"
-                },
-                "example": {
-                  "msg": "informational message"
                 }
               }
             }
           },
           "500": {
             "$ref": "#/components/responses/internalServerError"
-          }
-        }
-      }
-    },
-    "/api/ingredient": {
-      "post": {
-        "tags": [
-          "ingredient"
-        ],
-        "summary": "Create a new ingredient",
-        "operationId": "createIngredient",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Ingredient"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "ingredient saved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Response"
-                },
-                "example": {
-                  "msg": "ingredient saved successfully",
-                  "id": "some_alphanumeric_id_24"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "failed to create ingredient: ",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseWithNoId"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "ingredient"
-        ],
-        "summary": "Delete an ingredient",
-        "operationId": "deleteIngredient",
-        "responses": {
-          "200": {
-            "description": "ingredient deleted successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseWithNoId"
-                },
-                "example": {
-                  "msg": "ingredient deleted successfully"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "failed to delete ingredient: ",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseWithNoId"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "ingredient"
-        ],
-        "summary": "Retrieve a user's ingredients",
-        "operationId": "getIngredients",
-        "parameters": [
-          {
-            "name": "business_name",
-            "in": "query",
-            "description": "The name of the business which owns the ingredients that will be returned",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "ingredients retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "owner_id": {
-                        "example": "some_alphanumeric_id_24"
-                      },
-                      "name": {
-                        "example": "prova"
-                      },
-                      "id": {
-                        "example": "some_alphanumeric_id_24"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "failed to retrieve ingredients",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseWithNoId"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerErrorResponse"
-                }
-              }
-            }
           }
         }
       }
@@ -459,7 +270,6 @@
             "type": "string",
             "example": "Trattoria Volpe"
           },
-          "password": {
           "password": {
             "type": "string",
             "example": "12characterpassword"
@@ -480,7 +290,7 @@
         "properties": {
           "name": {
             "type": "string",
-            "example": "Passata di Pomodoro"
+            "example": "Onions"
           }
         },
         "required": [
@@ -493,6 +303,18 @@
           "msg": {
             "type": "string",
             "example": "informational message"
+          }
+        },
+        "required": [
+          "msg"
+        ]
+      },
+      "apiPostResponse": {
+        "type": "object",
+        "properties": {
+          "msg": {
+            "type": "string",
+            "example": "informational message"
           },
           "id": {
             "type": "string",
@@ -500,7 +322,8 @@
           }
         },
         "required": [
-          "msg"
+          "msg",
+          "id"
         ]
       }
     },
