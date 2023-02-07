@@ -17,8 +17,11 @@ const post_data = [
     [ 400, valid_document ],
     [ 400, { name: 'pizza margherita' } ],
     [ 400, { name: 'pizza sbagliata', ingredients: true } ],
+    [ 400, { name: 'pizza sbagliata 2', categories: 2 } ],
     [ 400, { name: 'pizza impossibile', ingredients: [ 'non un ObjectId', 'arcobaleno', 'scaglie di drago' ] } ],
+    [ 400, { name: 'pizza impossibile 2', categories: [ 'non un ObjectId' ] } ],
     [ 400, { name: 'pizza con objid inesistente', ingredients: [ '63e1272db590ba7110e19bbc' ] } ],
+    [ 400, { name: 'pizza con objid inesistente 2', categories: [ '63e1272db590ba7110e19bbc' ] } ],
     [ 400, { name: '' } ],
     [ 400, { name: null } ],
     [ 400, {} ],
@@ -54,6 +57,11 @@ describe(api_path, () => {
 
     test.each(delete_data)("DELETE (dish deletion) %d, %o", async (c,d) => await del(c,d));
     
+    test("GET (successful dish read)", () => request.get("/api/dish?business_name=Nome Ristorante Test")(200, null));
+
+    test("GET (fail dish read, wrong business_name)", () => request.get("/api/dish?business_name=Ristorante Impossibile")(400, null));
+
+    test("GET (fail dish read, no business name)", () => request.get("/api/dish")(400, null));
 
     afterAll(async () => {
         server.close();

@@ -39,11 +39,11 @@ describe(api_path, () => {
 
     test.each(delete_data)("DELETE (ingredient deletion) %d %o", async (c, d) => await del(jwt)(c,d));
 
-    test("GET (ingredient read)", () => request.get("/api/ingredient?business_name=Nome Ristorante Test")(200, null));
+    test("GET (successful ingredient read)", () => request.get("/api/ingredient?business_name=Nome Ristorante Test")(200, null));
 
-    test("GET (ingredient read)", () => request.get("/api/ingredient?business_name=Ristorante Impossibile")(400, null));
+    test("GET (fail ingredient read, wrong business_name)", () => request.get("/api/ingredient?business_name=Ristorante Impossibile")(400, null));
 
-    test("GET (ingredient read)", () => request.get("/api/ingredient")(400, null));
+    test("GET (fail ingredient read, no business name)", () => request.get("/api/ingredient")(400, null));
     
 
     afterAll(async () => {
