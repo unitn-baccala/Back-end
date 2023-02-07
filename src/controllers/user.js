@@ -4,7 +4,6 @@ const Ingredient = require('../models/ingredient');
 const Dish = require('../models/dish');
 const failHandler = require('../functions/fail');
 
-// POST /api/user => createUser
 const createUser = async (req, res, next) => {
     const fail = failHandler(res, "failed to create user: ");
 
@@ -52,7 +51,6 @@ const createUser = async (req, res, next) => {
     res.status(201).send({ msg: "user saved successfully", id: document._id});
 };
 
-// DELETE /api/user => deleteUser
 const deleteUser = async (req, res, next) => {
     const fail = failHandler(res, "failed to delete user: ");
 
