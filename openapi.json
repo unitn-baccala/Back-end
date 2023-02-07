@@ -18,6 +18,14 @@
     {
       "name": "ingredient",
       "description": "Operations about ingredients"
+    },
+    {
+      "name": "category",
+      "description": "Operations about categories"
+    },
+    {
+      "name": "dish",
+      "description": "Operations about dishes"
     }
   ],
   "paths": {
@@ -100,6 +108,12 @@
               }
             }
           },
+          "401": {
+            "$ref": "#/components/responses/unauthenticatedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/forbiddenError"
+          },
           "500": {
             "$ref": "#/components/responses/internalServerError"
           }
@@ -151,6 +165,12 @@
               }
             }
           },
+          "401": {
+            "$ref": "#/components/responses/unauthenticatedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/forbiddenError"
+          },
           "500": {
             "$ref": "#/components/responses/internalServerError"
           }
@@ -189,6 +209,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthenticatedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/forbiddenError"
           },
           "500": {
             "$ref": "#/components/responses/internalServerError"
@@ -255,6 +281,330 @@
           }
         }
       }
+    },
+    "/api/category": {
+      "post": {
+        "tags": [
+          "category"
+        ],
+        "security": [
+          {
+            "httpBearerAuth": []
+          }
+        ],
+        "summary": "Create a new ategory",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Category"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "ingredient saved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/apiPostResponse"
+                },
+                "example": {
+                  "msg": "category saved successfully",
+                  "id": "some_alphanumeric_id_24"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "failed to create Category",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/apiResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthenticatedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/forbiddenError"
+          },
+          "500": {
+            "$ref": "#/components/responses/internalServerError"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "category"
+        ],
+        "security": [
+          {
+            "httpBearerAuth": []
+          }
+        ],
+        "summary": "Delete a category",
+        "responses": {
+          "200": {
+            "description": "category deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/apiResponse"
+                },
+                "example": {
+                  "msg": "category deleted successfully"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "failed to delete Category",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/apiResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthenticatedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/forbiddenError"
+          },
+          "500": {
+            "$ref": "#/components/responses/internalServerError"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "category"
+        ],
+        "summary": "Retrieve a user's categories",
+        "parameters": [
+          {
+            "name": "business_name",
+            "in": "query",
+            "description": "The name of the business which owns the categories that will be returned",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "categories retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "CategoriesArray",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "example": "some_alphanumeric_id_24"
+                      },
+                      "owner_id": {
+                        "type": "string",
+                        "example": "some_alphanumeric_id_24"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "Spicy"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "failed to retrieve categories",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/apiResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/internalServerError"
+          }
+        }
+      }
+    },
+    "/api/dish": {
+      "post": {
+        "tags": [
+          "dish"
+        ],
+        "security": [
+          {
+            "httpBearerAuth": []
+          }
+        ],
+        "summary": "Create a new dish",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Category"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "ingredient saved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/apiPostResponse"
+                },
+                "example": {
+                  "msg": "category saved successfully",
+                  "id": "some_alphanumeric_id_24"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "failed to create Category",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/apiResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthenticatedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/forbiddenError"
+          },
+          "500": {
+            "$ref": "#/components/responses/internalServerError"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "dish"
+        ],
+        "security": [
+          {
+            "httpBearerAuth": []
+          }
+        ],
+        "summary": "Delete a category",
+        "responses": {
+          "200": {
+            "description": "category deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/apiResponse"
+                },
+                "example": {
+                  "msg": "category deleted successfully"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "failed to delete Category",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/apiResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthenticatedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/forbiddenError"
+          },
+          "500": {
+            "$ref": "#/components/responses/internalServerError"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "dish"
+        ],
+        "summary": "Retrieve a user's categories",
+        "parameters": [
+          {
+            "name": "business_name",
+            "in": "query",
+            "description": "The name of the business which owns the categories that will be returned",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "categories retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "CategoriesArray",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "example": "some_alphanumeric_id_24"
+                      },
+                      "owner_id": {
+                        "type": "string",
+                        "example": "some_alphanumeric_id_24"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "Spicy"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "failed to retrieve categories",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/apiResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/internalServerError"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -297,6 +647,61 @@
           "name"
         ]
       },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Spicy"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "Dish": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Spaghetti alla carbonara"
+          },
+          "description": {
+            "type": "string",
+            "example": "Buonissima carbonara del nostro chef"
+          },
+          "image": {
+            "type": "string",
+            "format": "byte"
+          },
+          "ingredients": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "name",
+          "categories"
+        ]
+      },
       "apiResponse": {
         "type": "object",
         "properties": {
@@ -328,12 +733,28 @@
       }
     },
     "responses": {
-      "unauthorizedError": {
-        "description": "Authentication information is missing or invalid",
-        "headers": {
-          "WWW_Authenticate": {
+      "unauthenticatedError": {
+        "description": "token not provided",
+        "content": {
+          "application/json": {
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/apiResponse"
+            },
+            "example": {
+              "msg": "token not provided"
+            }
+          }
+        }
+      },
+      "forbiddenError": {
+        "description": "token not valid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/apiResponse"
+            },
+            "example": {
+              "msg": "token not valid"
             }
           }
         }
