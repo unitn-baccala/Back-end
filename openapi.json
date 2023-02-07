@@ -1,11 +1,8 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "Swagger Baccalà - OpenAPI 3.0",
-    "description": "Documentazione delle API del servizio di gestione digitale del menù: Baccalà",
-    "contact": {
-      "url": "https://github.com/unitn-baccala"
-    },
+    "title": "Swagger Baccalà - OpenAPI",
+    "description": "API documentation of the baccalà service\n\nSome useful links:\n- [The Baccalà repository](https://github.com/unitn-baccala)",
     "version": "1.0.0"
   },
   "servers": [
@@ -16,14 +13,16 @@
   "tags": [
     {
       "name": "user",
-      "description": "Operazioni riguardo l'utente"
+      "description": "Operations about the user"
     }
   ],
   "paths": {
     "/user": {
       "post": {
-        "summary": "Crea utente",
-        "description": "Crea un nuovo utente all'interno del database",
+        "tags": [
+          "user"
+        ],
+        "summary": "Create user",
         "operationId": "createUser",
         "requestBody": {
           "content": {
@@ -40,67 +39,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Response"
+                  "$ref": "#/components/schemas/apiResponse"
+                },
+                "example": {
+                  "msg": "user saved successfully",
+                  "id": "some_alphanumeric_id_24"
                 }
               }
             }
           },
           "400": {
-            "description": "failed to create user: ",
+            "description": "failed to create user",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Response"
-                },
-                "examples": {
-                  "request body is null": {
-                    "value": {
-                      "msg": "req.body == null",
-                      "id": "some_alphanumeric_id_24"
-                    }
-                  },
-                  "request password is null": {
-                    "value": {
-                      "msg": "req.body.password == null",
-                      "id": "some_alphanumeric_id_24"
-                    }
-                  },
-                  "request email is null": {
-                    "value": {
-                      "msg": "req.body.email == null",
-                      "id": "some_alphanumeric_id_24"
-                    }
-                  },
-                  "request business name is null": {
-                    "value": {
-                      "msg": "req.body.business_name == null",
-                      "id": "some_alphanumeric_id_24"
-                    }
-                  },
-                  "insecure passoword": {
-                    "value": {
-                      "msg": "insecure password",
-                      "id": "some_alphanumeric_id_24"
-                    }
-                  },
-                  "invalid email address": {
-                    "value": {
-                      "msg": "invalid email address",
-                      "id": "some_alphanumeric_id_24"
-                    }
-                  },
-                  "email address is taken": {
-                    "value": {
-                      "msg": "email address is taken",
-                      "id": "some_alphanumeric_id_24"
-                    }
-                  },
-                  "business name is taken": {
-                    "value": {
-                      "msg": "business name is taken",
-                      "id": "some_alphanumeric_id_24"
-                    }
-                  }
+                  "$ref": "#/components/schemas/apiResponse"
                 }
               }
             }
@@ -110,7 +63,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                  "$ref": "#/components/schemas/apiResponse"
                 }
               }
             }
@@ -118,8 +71,15 @@
         }
       },
       "delete": {
-        "summary": "Elimina utente",
-        "description": "Elimina un utente dal database",
+        "tags": [
+          "user"
+        ],
+        "security": [
+          {
+            "httpBearerAuth": []
+          }
+        ],
+        "summary": "Delete user",
         "operationId": "deleteUser",
         "responses": {
           "200": {
@@ -127,7 +87,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Response"
+                  "$ref": "#/components/schemas/apiResponse"
                 },
                 "example": {
                   "msg": "user deleted successfully",
@@ -137,17 +97,20 @@
             }
           },
           "400": {
-            "description": "failed to delete user: "
-          },
-          "500": {
-            "description": "internal server error",
+            "description": "user deleted successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                  "$ref": "#/components/schemas/apiResponse"
+                },
+                "example": {
+                  "msg": "informational message"
                 }
               }
             }
+          },
+          "500": {
+            "$ref": "#/components/responses/internalServerError"
           }
         }
       }
@@ -166,7 +129,7 @@
             "type": "string",
             "example": "Trattoria Volpe"
           },
-          "password_hash": {
+          "password": {
             "type": "string",
             "example": "password12caratteri"
           },
@@ -178,10 +141,10 @@
         "required": [
           "email",
           "business_name",
-          "password_hash"
+          "password"
         ]
       },
-      "Response": {
+      "apiResponse": {
         "type": "object",
         "properties": {
           "msg": {
@@ -192,20 +155,42 @@
             "type": "string",
             "example": "some_alphanumeric_id_24"
           }
-        }
-      },
-      "InternalServerErrorResponse": {
-        "type": "object",
-        "properties": {
-          "msg": {
-            "type": "string",
-            "example": "internal server error"
-          },
-          "id": {
-            "type": "string",
-            "example": "some_alphanumeric_id_24"
+        },
+        "required": [
+          "msg"
+        ]
+      }
+    },
+    "responses": {
+      "unauthorizedError": {
+        "description": "Authentication information is missing or invalid",
+        "headers": {
+          "WWW_Authenticate": {
+            "schema": {
+              "type": "string"
+            }
           }
         }
+      },
+      "internalServerError": {
+        "description": "internal server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/apiResponse"
+            },
+            "example": {
+              "msg": "internal server error"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "httpBearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }
