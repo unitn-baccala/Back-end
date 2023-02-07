@@ -13,11 +13,15 @@
   "tags": [
     {
       "name": "user",
-      "description": "Operations about the user"
+      "description": "Operations about users"
+    },
+    {
+      "name": "ingredient",
+      "description": "Operations about ingredients"
     }
   ],
   "paths": {
-    "/user": {
+    "/api/user": {
       "post": {
         "tags": [
           "user"
@@ -114,6 +118,332 @@
           }
         }
       }
+    },
+    "/api/ingredient": {
+      "post": {
+        "tags": [
+          "ingredient"
+        ],
+        "summary": "Create a new ingredient",
+        "operationId": "createIngredient",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Ingredient"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "ingredient saved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response"
+                },
+                "example": {
+                  "msg": "ingredient saved successfully",
+                  "id": "some_alphanumeric_id_24"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "failed to create ingredient: ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseWithNoId"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "ingredient"
+        ],
+        "summary": "Delete an ingredient",
+        "operationId": "deleteIngredient",
+        "responses": {
+          "200": {
+            "description": "ingredient deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseWithNoId"
+                },
+                "example": {
+                  "msg": "ingredient deleted successfully"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "failed to delete ingredient: ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseWithNoId"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "ingredient"
+        ],
+        "summary": "Retrieve a user's ingredients",
+        "operationId": "getIngredients",
+        "parameters": [
+          {
+            "name": "business_name",
+            "in": "query",
+            "description": "The name of the business which owns the ingredients that will be returned",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ingredients retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "owner_id": {
+                        "example": "some_alphanumeric_id_24"
+                      },
+                      "name": {
+                        "example": "prova"
+                      },
+                      "id": {
+                        "example": "some_alphanumeric_id_24"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "failed to retrieve ingredients",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseWithNoId"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/apiResponse"
+                },
+                "example": {
+                  "msg": "informational message"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/internalServerError"
+          }
+        }
+      }
+    },
+    "/api/ingredient": {
+      "post": {
+        "tags": [
+          "ingredient"
+        ],
+        "summary": "Create a new ingredient",
+        "operationId": "createIngredient",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Ingredient"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "ingredient saved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response"
+                },
+                "example": {
+                  "msg": "ingredient saved successfully",
+                  "id": "some_alphanumeric_id_24"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "failed to create ingredient: ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseWithNoId"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "ingredient"
+        ],
+        "summary": "Delete an ingredient",
+        "operationId": "deleteIngredient",
+        "responses": {
+          "200": {
+            "description": "ingredient deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseWithNoId"
+                },
+                "example": {
+                  "msg": "ingredient deleted successfully"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "failed to delete ingredient: ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseWithNoId"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "ingredient"
+        ],
+        "summary": "Retrieve a user's ingredients",
+        "operationId": "getIngredients",
+        "parameters": [
+          {
+            "name": "business_name",
+            "in": "query",
+            "description": "The name of the business which owns the ingredients that will be returned",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ingredients retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "owner_id": {
+                        "example": "some_alphanumeric_id_24"
+                      },
+                      "name": {
+                        "example": "prova"
+                      },
+                      "id": {
+                        "example": "some_alphanumeric_id_24"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "failed to retrieve ingredients",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseWithNoId"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -130,8 +460,9 @@
             "example": "Trattoria Volpe"
           },
           "password": {
+          "password": {
             "type": "string",
-            "example": "password12caratteri"
+            "example": "12characterpassword"
           },
           "enable_2fa": {
             "type": "boolean",
@@ -142,6 +473,18 @@
           "email",
           "business_name",
           "password"
+        ]
+      },
+      "Ingredient": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Passata di Pomodoro"
+          }
+        },
+        "required": [
+          "name"
         ]
       },
       "apiResponse": {

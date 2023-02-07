@@ -9,7 +9,13 @@ const validateObjectIds = async (arr, MongooseModel) => {
         }
     });
 
-    let all_exist = all_convertible_to_objid && (await MongooseModel.find({ _id: { $in: objids } })).length == objids.length;
+    
+    if(!all_convertible_to_objid)
+        return null;
+    
+    const existing_elems = await MongooseModel.find({ _id: { $in: objids } });
+
+    let all_exist = all_convertible_to_objid && .length == objids.length;
 
     return all_exist ? objids : null;
 };
