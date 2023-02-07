@@ -6,6 +6,6 @@ const tokenChecker = require('../functions/tokenChecker')
 router.post('/menu', tokenChecker, controller.createMenu);
 router.delete('/menu', tokenChecker, controller.deleteMenu);
 router.get('/menu', controller.getMenus);
-router.get('/menu/full', controller.getFullMenus);
+router.get('/menu/full', controller.getFullMenu);
 
 module.exports = router;
