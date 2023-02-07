@@ -21,14 +21,18 @@ const createDish = async (req, res, next) => {
 
     if(raw_ingredients != null && !Array.isArray(raw_ingredients))
         return fail(400, "failed to create dish: invalid 'ingredients' parameter" );
+    
+    if(raw_categories != null && !Array.isArray(raw_categories))
+        return fail(400, "failed to create dish: invalid 'categories' parameter" );
 
     const found = (await Dish.findOne({ owner_id, name }).exec()) !== null;
 
     if(found)
         return fail(400, "name taken");
 
-    const ingredients = validateObjectIds(raw_ingredients, Ingredient);
-    const categories = validateObjectIds(raw_categories, Category);
+
+    const ingredients = await validateObjectIds(raw_ingredients, Ingredient);
+    const categories = await validateObjectIds(raw_categories, Category);
 
     if(ingredients == null)
         return fail(400, "some ingredients do not exist");
