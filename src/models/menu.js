@@ -14,25 +14,15 @@ const schema = new mongoose.Schema({
         type: Array,
         required: true,
     },
+    //in minutes since midnight
     start_time: {
-        hour: {
-            type: Number,
-            required: true
-        },
-        minute: {
-            type: Number,
-            required: true
-        },
+        type: Number,
+        required: true
     },
+    //in minutes since midnight
     end_time: {
-        hour: {
-            type: Number,
-            required: true
-        },
-        minute: {
-            type: Number,
-            required: true
-        },
+        type: Number,
+        required: true
     },
 }, { versionKey: false });
 
