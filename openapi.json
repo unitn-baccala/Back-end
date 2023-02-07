@@ -100,6 +100,12 @@
               }
             }
           },
+          "401": {
+            "$ref": "#/components/responses/unauthenticatedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/forbiddenError"
+          },
           "500": {
             "$ref": "#/components/responses/internalServerError"
           }
@@ -151,6 +157,12 @@
               }
             }
           },
+          "401": {
+            "$ref": "#/components/responses/unauthenticatedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/forbiddenError"
+          },
           "500": {
             "$ref": "#/components/responses/internalServerError"
           }
@@ -189,6 +201,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthenticatedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/forbiddenError"
           },
           "500": {
             "$ref": "#/components/responses/internalServerError"
@@ -328,12 +346,28 @@
       }
     },
     "responses": {
-      "unauthorizedError": {
-        "description": "Authentication information is missing or invalid",
-        "headers": {
-          "WWW_Authenticate": {
+      "unauthenticatedError": {
+        "description": "token not provided",
+        "content": {
+          "application/json": {
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/apiResponse"
+            },
+            "example": {
+              "msg": "token not provided"
+            }
+          }
+        }
+      },
+      "forbiddenError": {
+        "description": "token not valid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/apiResponse"
+            },
+            "example": {
+              "msg": "token not valid"
             }
           }
         }
