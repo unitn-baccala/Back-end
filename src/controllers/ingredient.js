@@ -64,6 +64,7 @@ const getIngredients = async (req, res, next) => {
         return fail(400, "no such business name found");
 
     const ingredients = await Ingredient.find({ owner_id: user._id });
+    /* istanbul ignore next */
     if (!ingredients)
         return fail(500, "internal server error");
     
