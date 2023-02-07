@@ -1,12 +1,14 @@
 const request = require('./request'); //for http requests
 
 const api_path = '/api/dish';
+const Ingredient = require('../models/ingredient');
+const User = require('../models/user');
 
 const auth_post = request.auth_post(api_path), auth_del = request.auth_del(api_path);
 
 let server, mongoose;
 
-const valid_document = { 
+let valid_document = {
     name: 'pizza margherita',
     description: 'our italian chef\'s favourite',
     ingredients: [  ] //array of ids
@@ -39,9 +41,9 @@ describe(api_path, () => {
         post = auth_post(jwt);
         del = auth_del(jwt);
 
-        await Promise.allSettled([
-            del(200, valid_document),
-        ]);
+        const user = await User.findOne({email: request.test_credentials.email}).exec();
+        const valid_ingredient = await Ingredient.findOne({ name: "farina", owner_id: user._id }).exec();
+        valid_document.ingredients.push(valid_ingredient._id);
     });
     test("POST successful dish creation", async () => {
         const dish_id = (await post(201, valid_document)).id;
