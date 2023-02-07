@@ -56,49 +56,49 @@
                   "request body is null": {
                     "value": {
                       "msg": "req.body == null",
-                      "id": "63e1272db590ba7110e19bbc"
+                      "id": "some_alphanumeric_id_24"
                     }
                   },
                   "request password is null": {
                     "value": {
                       "msg": "req.body.password == null",
-                      "id": "63e1272db590ba7110e19bbc"
+                      "id": "some_alphanumeric_id_24"
                     }
                   },
                   "request email is null": {
                     "value": {
                       "msg": "req.body.email == null",
-                      "id": "63e1272db590ba7110e19bbc"
+                      "id": "some_alphanumeric_id_24"
                     }
                   },
                   "request business name is null": {
                     "value": {
                       "msg": "req.body.business_name == null",
-                      "id": "63e1272db590ba7110e19bbc"
+                      "id": "some_alphanumeric_id_24"
                     }
                   },
                   "insecure passoword": {
                     "value": {
                       "msg": "insecure password",
-                      "id": "63e1272db590ba7110e19bbc"
+                      "id": "some_alphanumeric_id_24"
                     }
                   },
                   "invalid email address": {
                     "value": {
                       "msg": "invalid email address",
-                      "id": "63e1272db590ba7110e19bbc"
+                      "id": "some_alphanumeric_id_24"
                     }
                   },
                   "email address is taken": {
                     "value": {
                       "msg": "email address is taken",
-                      "id": "63e1272db590ba7110e19bbc"
+                      "id": "some_alphanumeric_id_24"
                     }
                   },
                   "business name is taken": {
                     "value": {
                       "msg": "business name is taken",
-                      "id": "63e1272db590ba7110e19bbc"
+                      "id": "some_alphanumeric_id_24"
                     }
                   }
                 }
@@ -110,11 +110,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Response"
-                },
-                "example": {
-                  "msg": "internal server error",
-                  "id": "63e1272db590ba7110e19bbc"
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
                 }
               }
             }
@@ -126,8 +122,32 @@
         "description": "Elimina un utente dal database",
         "operationId": "deleteUser",
         "responses": {
-          "default": {
-            "description": "Default error sample response"
+          "200": {
+            "description": "user deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response"
+                },
+                "example": {
+                  "msg": "user deleted successfully",
+                  "id": "some_alphanumeric_id_24"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "failed to delete user: "
+          },
+          "500": {
+            "description": "internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -166,11 +186,24 @@
         "properties": {
           "msg": {
             "type": "string",
-            "example": "saved successfully"
+            "example": "informational message"
           },
           "id": {
             "type": "string",
-            "example": "63e1272db590ba7110e19bbc"
+            "example": "some_alphanumeric_id_24"
+          }
+        }
+      },
+      "InternalServerErrorResponse": {
+        "type": "object",
+        "properties": {
+          "msg": {
+            "type": "string",
+            "example": "internal server error"
+          },
+          "id": {
+            "type": "string",
+            "example": "some_alphanumeric_id_24"
           }
         }
       }
