@@ -79,20 +79,31 @@ const getDishes = async (req, res, next) => {
 
     if(business_name == null)
         return fail(400, "no business name specified");
-    else {
-        const user = await User.findOne({business_name});
-        if(!user) {
-            return fail(400, "no such business name found");
-        }
 
-        const dishes = await Dish.find({ owner_id: user._id });
+    const user = await User.findOne({business_name});
+    if(!user)
+        return fail(400, "no such business name found");
 
-        if (dishes) {
-            res.status(200).send(dishes);
-        } else {
-            fail(400, "no dishes found");
+    let dishes = await Dish.find({ owner_id: user._id });
+    
+    for(let i = 0; i < dishes.length; i++) {
+        if (dishes[i].image != null) {
+            dishes[i] = {
+                owner_id: dishes[i].owner_id,
+                name: dishes[i].name,
+                description: dishes[i].description,
+                image: dishes[i].image.toString('base64'), 
+                ingredients: dishes[i].ingredients,
+                categories: dishes[i].categories,
+            }
         }
     }
+
+    /* istanbul ignore next */
+    if (dishes == null)
+        return fail(500, "internal server error");
+
+    res.status(200).send(dishes);
 }
 
 module.exports = { createDish, deleteDish, getDishes };
