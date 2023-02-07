@@ -1,7 +1,10 @@
 const Dish = require('../models/dish');
 const User = require('../models/user');
 const Ingredient = require('../models/ingredient');
+const Category = require('../models/category');
 const failHandler = require('../functions/fail');
+const ObjectId = require('mongoose').Types.ObjectId;
+const validateObjectIds = require('../functions/validateObjectIds');
 
 const createDish = async (req, res, next) => {
     const fail = failHandler(res, "failed to create dish: ");
@@ -11,12 +14,12 @@ const createDish = async (req, res, next) => {
         return fail(400, "req.body == null || req.token == null")
         
     const owner_id = req.body.jwt_payload.user_id, name = req.body.name;
-    const description = req.body.description, image = req.body.image, ingredients = req.body.ingredients, categories = req.body.categories;
+    const description = req.body.description, image = req.body.image, raw_ingredients = req.body.ingredients, raw_categories = req.body.categories;
 
     if(name == null || String(name).length < 1)
         return fail(400, "invalid name");
 
-    if(ingredients != null && !Array.isArray(ingredients))
+    if(raw_ingredients != null && !Array.isArray(raw_ingredients))
         return fail(400, "failed to create dish: invalid 'ingredients' parameter" );
 
     const found = (await Dish.findOne({ owner_id, name }).exec()) !== null;
@@ -24,33 +27,16 @@ const createDish = async (req, res, next) => {
     if(found)
         return fail(400, "name taken");
 
-    let ingredients_objid = [];
-    let all_ingredients_exist = ingredients.every(ing => {
-        try {
-            ingredients_objid.push(ObjectId(ing));
-            return true;
-        } catch(e) {
-            return false;
-        }
-    });
+    const ingredients = validateObjectIds(raw_ingredients, Ingredient);
+    const categories = validateObjectIds(raw_categories, Category);
 
-    all_ingredients_exist = all_ingredients_exist && (await Ingredient.find({ _id: { $in: ingredients_objid } })).length == ingredients.length;
-    
-    if(!all_ingredients_exist)
+    if(ingredients == null)
         return fail(400, "some ingredients do not exist");
 
-    /*
-    let img_buffer;
-    if(typeof image === 'String') {
-        try {
-            img_buffer = Buffer.from(image, 'base64');
-        } catch(e) {
-            return fail(400, "failed to convert image from base64");
-        }
-    }*/
-    //https://mongoosejs.com/docs/schematypes.html#buffers moongose lo converte automaticamente sembra
-    
-    const document = new Dish({ owner_id, name, description, image, ingredients, categories }); //implementare tutti i controlli sulle categorie
+    if(categories == null)
+        return fail(400, "some categories do not exist");
+
+    const document = new Dish({ owner_id, name, description, image, ingredients, categories });
     const was_saved = (await document.save()) !== null;
     /* istanbul ignore next */
     if(!was_saved)
