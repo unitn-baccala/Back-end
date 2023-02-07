@@ -7,8 +7,8 @@ const createCategory = async (req, res, next) => {
     const fail = failHandler(res, "failed to create category: ");
     
     /* istanbul ignore next */
-    if (req.body == null || req.body.jwt_payload == null) //this should never happen since the API requires token checking 
-        return fail(500, "req.body == null || req.body.token == null");
+    if (req.body == null || req.body.jwt_payload == null)
+        return fail(500, "internal server error");
 
     const name = req.body.name, owner_id = req.body.jwt_payload.user_id;
 
@@ -35,8 +35,8 @@ const deleteCategory = async (req, res, next) => {
     const fail = failHandler(res, "failed to delete category: ");
  
     /* istanbul ignore next */
-    if (req.body == null || req.body.jwt_payload == null) // the function is token checked so this cannot happen
-        return fail(500, "req.body == null || req.body.token == null");
+    if (req.body == null || req.body.jwt_payload == null)
+        return fail(500, "internal server error");
     
     const _id = req.body.category_id, owner_id = req.body.jwt_payload.user_id;
 
@@ -54,8 +54,8 @@ const getCategories = async (req, res, next) => {
     const fail = failHandler(res, "failed to get category: ");
 
     /* istanbul ignore next */
-    if (req.query == null) //req.query can be empty but not null so this should not happen
-        return fail(400, "no parameters");
+    if (req.query == null)
+        return fail(500, "internal server error");
     
     const business_name = req.query.business_name;
     if(business_name == null)
@@ -66,8 +66,8 @@ const getCategories = async (req, res, next) => {
         return fail(400, "no such business name found");
 
     const categories = await Category.find({ owner_id: user._id });
-    if (!categories)
-        return fail(400, "no categories found");
+    if (categories == null)
+        return fail(500, "internal server error");
     
     res.status(200).send(categories);
 }

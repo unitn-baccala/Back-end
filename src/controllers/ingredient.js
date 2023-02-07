@@ -53,7 +53,7 @@ const getIngredients = async (req, res, next) => {
 
     /* istanbul ignore next */
     if (req.query == null) //req.query can be empty but not null so this should not happen
-        return fail(400, "no parameters");
+        return fail(500, "internal server error");
     
     const business_name = req.query.business_name;
     if(business_name == null)

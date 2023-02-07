@@ -10,8 +10,8 @@ const createDish = async (req, res, next) => {
     const fail = failHandler(res, "failed to create dish: ");
 
     /* istanbul ignore next */
-    if (req.body == null || req.body.jwt_payload == null) //this should never happen since the API requires token checking 
-        return fail(400, "req.body == null || req.token == null")
+    if (req.body == null || req.body.jwt_payload == null)
+        return fail(500, "internal server error")
         
     const owner_id = req.body.jwt_payload.user_id, name = req.body.name;
     const description = req.body.description, image = req.body.image, raw_ingredients = req.body.ingredients, raw_categories = req.body.categories;
@@ -52,8 +52,8 @@ const deleteDish = async (req, res, next) => {
     const fail = failHandler(res, "failed to delete dish: ");
 
     /* istanbul ignore next */
-    if (req.body == null || req.body.jwt_payload == null) //this should never happen since the API requires token checking 
-        return fail(400, "req.body == null || req.body.token == null");
+    if (req.body == null || req.body.jwt_payload == null)
+        return fail(500, "internal server error");
 
     const _id = req.body.dish_id, owner_id = req.body.jwt_payload.user_id;
 
@@ -71,9 +71,9 @@ const deleteDish = async (req, res, next) => {
 const getDishes = async (req, res, next) => {
     const fail = failHandler(res, "failed to get dishes: ");
     
-    if (req.query == null) {
-        return fail(400, "no parameters");
-    }
+    /* istanbul ignore next */
+    if (req.query == null)
+        return fail(500, "internal server error");
     
     const business_name = req.query.business_name;
 
