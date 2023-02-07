@@ -30,6 +30,10 @@ describe('/api/authenticate', () => {
         await post({token: "not really a jwt"})(403, valid_document);
     });
 
+    test("using no jwt", async () => {
+        await post({})(401, valid_document);
+    });
+
     test("using jwt", async () => {
         await Ingredient.deleteOne(valid_document).exec();
 
