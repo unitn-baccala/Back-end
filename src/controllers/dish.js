@@ -43,11 +43,12 @@ const createDish = async (req, res, next) => {
     let img_buffer;
     if(typeof image === 'String') {
         try {
-            img_buffer = Buffer.from(image, 'base64');
+            img_buffer = Buffer.from(image).toString('base64');
         } catch(e) {
             return fail(400, "failed to convert image from base64");
         }
-    }*/
+    }
+    */
     //https://mongoosejs.com/docs/schematypes.html#buffers moongose lo converte automaticamente sembra
     
     const document = new Dish({ owner_id, name, description, image, ingredients, categories }); //implementare tutti i controlli sulle categorie
