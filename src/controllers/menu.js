@@ -137,7 +137,7 @@ const getFullMenu = async (req, res, next) => {
                 from: "menus",
                 localField: "_id",
                 foreignField: "owner_id",
-                as: "menus",
+                as: "menu",
                 pipeline: [
                     {
                         $match: {
@@ -198,7 +198,7 @@ const getFullMenu = async (req, res, next) => {
             },
         },
         {
-            $unwind: "$menus"
+            $unwind: "$menu"
         },
     ]).exec();
 

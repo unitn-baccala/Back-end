@@ -26,6 +26,10 @@
     {
       "name": "dish",
       "description": "Operations about dishes"
+    },
+    {
+      "name": "menu",
+      "description": "Operations about menus"
     }
   ],
   "paths": {
@@ -258,7 +262,7 @@
                       },
                       "name": {
                         "type": "string",
-                        "example": "onions"
+                        "example": "cipolle"
                       }
                     }
                   }
@@ -292,7 +296,7 @@
             "httpBearerAuth": []
           }
         ],
-        "summary": "Create a new ategory",
+        "summary": "Create a new category",
         "requestBody": {
           "content": {
             "application/json": {
@@ -304,7 +308,7 @@
         },
         "responses": {
           "201": {
-            "description": "ingredient saved successfully",
+            "description": "category saved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -318,7 +322,7 @@
             }
           },
           "400": {
-            "description": "failed to create Category",
+            "description": "failed to create category",
             "content": {
               "application/json": {
                 "schema": {
@@ -363,7 +367,7 @@
             }
           },
           "400": {
-            "description": "failed to delete Category",
+            "description": "failed to delete category",
             "content": {
               "application/json": {
                 "schema": {
@@ -420,7 +424,7 @@
                       },
                       "name": {
                         "type": "string",
-                        "example": "Spicy"
+                        "example": "piccante"
                       }
                     }
                   }
@@ -459,28 +463,28 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Category"
+                "$ref": "#/components/schemas/Dish"
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "ingredient saved successfully",
+            "description": "dish saved successfully",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/apiPostResponse"
                 },
                 "example": {
-                  "msg": "category saved successfully",
+                  "msg": "dish saved successfully",
                   "id": "some_alphanumeric_id_24"
                 }
               }
             }
           },
           "400": {
-            "description": "failed to create Category",
+            "description": "failed to create dish",
             "content": {
               "application/json": {
                 "schema": {
@@ -509,23 +513,23 @@
             "httpBearerAuth": []
           }
         ],
-        "summary": "Delete a category",
+        "summary": "Delete a dish",
         "responses": {
           "200": {
-            "description": "category deleted successfully",
+            "description": "dish deleted successfully",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/apiResponse"
                 },
                 "example": {
-                  "msg": "category deleted successfully"
+                  "msg": "dish deleted successfully"
                 }
               }
             }
           },
           "400": {
-            "description": "failed to delete Category",
+            "description": "failed to delete dish",
             "content": {
               "application/json": {
                 "schema": {
@@ -549,12 +553,12 @@
         "tags": [
           "dish"
         ],
-        "summary": "Retrieve a user's categories",
+        "summary": "Retrieve a user's dishes",
         "parameters": [
           {
             "name": "business_name",
             "in": "query",
-            "description": "The name of the business which owns the categories that will be returned",
+            "description": "The name of the business which owns the dishes that will be returned",
             "required": true,
             "schema": {
               "type": "string"
@@ -563,11 +567,11 @@
         ],
         "responses": {
           "200": {
-            "description": "categories retrieved successfully",
+            "description": "dishes retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "CategoriesArray",
+                  "title": "DishesArray",
                   "type": "array",
                   "items": {
                     "type": "object",
@@ -582,7 +586,42 @@
                       },
                       "name": {
                         "type": "string",
-                        "example": "Spicy"
+                        "example": "Spaghetti alla carbonara"
+                      },
+                      "description": {
+                        "type": "string",
+                        "example": "Buonissima carbonara del nostro chef"
+                      },
+                      "image": {
+                        "type": "string",
+                        "format": "byte",
+                        "example": "binary_data"
+                      },
+                      "ingredients": {
+                        "title": "IngredientsArray",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "example": "some_alphanumeric_id_24"
+                            }
+                          }
+                        }
+                      },
+                      "categories": {
+                        "title": "CategoriesArray",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "example": "some_alphanumeric_id_24"
+                            }
+                          }
+                        }
                       }
                     }
                   }
@@ -591,7 +630,343 @@
             }
           },
           "400": {
-            "description": "failed to retrieve categories",
+            "description": "failed to retrieve dishes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/apiResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/internalServerError"
+          }
+        }
+      }
+    },
+    "/api/menu": {
+      "post": {
+        "tags": [
+          "menu"
+        ],
+        "security": [
+          {
+            "httpBearerAuth": []
+          }
+        ],
+        "summary": "Create a new menu",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Menu"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "menu saved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/apiPostResponse"
+                },
+                "example": {
+                  "msg": "menu saved successfully",
+                  "id": "some_alphanumeric_id_24"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "failed to create menu",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/apiResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthenticatedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/forbiddenError"
+          },
+          "500": {
+            "$ref": "#/components/responses/internalServerError"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "menu"
+        ],
+        "security": [
+          {
+            "httpBearerAuth": []
+          }
+        ],
+        "summary": "Delete a menu",
+        "responses": {
+          "200": {
+            "description": "menu deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/apiResponse"
+                },
+                "example": {
+                  "msg": "menu deleted successfully"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "failed to delete menu",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/apiResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthenticatedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/forbiddenError"
+          },
+          "500": {
+            "$ref": "#/components/responses/internalServerError"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "menu"
+        ],
+        "summary": "Retrieve a user's menus",
+        "parameters": [
+          {
+            "name": "business_name",
+            "in": "query",
+            "description": "The name of the business which owns the menus that will be returned",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "menus retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Menu",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "example": "some_alphanumeric_id_24"
+                      },
+                      "owner_id": {
+                        "type": "string",
+                        "example": "some_alphanumeric_id_24"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "Menu Cena"
+                      },
+                      "dishes": {
+                        "title": "DishesArray",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "example": "some_alphanumeric_id_24"
+                            }
+                          }
+                        }
+                      },
+                      "start_time": {
+                        "type": "number",
+                        "example": "minutes_since_midnight"
+                      },
+                      "end_time": {
+                        "type": "number",
+                        "example": "minutes_since_midnight"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "failed to retrieve menus",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/apiResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/internalServerError"
+          }
+        }
+      }
+    },
+    "/api/menu/full": {
+      "get": {
+        "tags": [
+          "menu"
+        ],
+        "summary": "Retrieve a user's categories and menus where ids are substituted with actual values",
+        "parameters": [
+          {
+            "name": "business_name",
+            "in": "query",
+            "description": "The name of the business which owns the menus that will be returned",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "menus retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Menu",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "some_alphanumeric_id_24"
+                    },
+                    "business_name": {
+                      "type": "string",
+                      "example": "Trattoria Volpe"
+                    },
+                    "categories": {
+                      "title": "CategoriesArray",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "some_alphanumeric_id_24"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "cipolle"
+                          }
+                        }
+                      }
+                    },
+                    "menu": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "some_alphanumeric_id_24"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "Cena"
+                        },
+                        "dishes": {
+                          "title": "DishesArray",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "example": "some_alphanumeric_id_24"
+                              },
+                              "name": {
+                                "type": "string",
+                                "example": "Spaghetti alla carbonara"
+                              },
+                              "description": {
+                                "type": "string",
+                                "example": "Buonissima carbonara del nostro chef"
+                              },
+                              "image": {
+                                "type": "string",
+                                "format": "byte",
+                                "example": "binary_data"
+                              },
+                              "ingredients": {
+                                "title": "IngredientsArray",
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string",
+                                      "example": "some_alphanumeric_id_24"
+                                    },
+                                    "name": {
+                                      "type": "string",
+                                      "example": "cipolle"
+                                    }
+                                  }
+                                }
+                              },
+                              "categories": {
+                                "title": "CategoriesArray",
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string",
+                                      "example": "some_alphanumeric_id_24"
+                                    },
+                                    "name": {
+                                      "type": "string",
+                                      "example": "piccante"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "start_time": {
+                          "type": "number",
+                          "example": "minutes_since_midnight"
+                        },
+                        "end_time": {
+                          "type": "number",
+                          "example": "minutes_since_midnight"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "failed to retrieve menus",
             "content": {
               "application/json": {
                 "schema": {
@@ -640,7 +1015,7 @@
         "properties": {
           "name": {
             "type": "string",
-            "example": "Onions"
+            "example": "cipolle"
           }
         },
         "required": [
@@ -652,7 +1027,7 @@
         "properties": {
           "name": {
             "type": "string",
-            "example": "Spicy"
+            "example": "piccante"
           }
         },
         "required": [
@@ -672,7 +1047,8 @@
           },
           "image": {
             "type": "string",
-            "format": "byte"
+            "format": "byte",
+            "example": "base64_image_source"
           },
           "ingredients": {
             "type": "array",
@@ -680,7 +1056,8 @@
               "type": "object",
               "properties": {
                 "id": {
-                  "type": "string"
+                  "type": "string",
+                  "example": "some_alphanumeric_id_24"
                 }
               }
             }
@@ -691,7 +1068,8 @@
               "type": "object",
               "properties": {
                 "id": {
-                  "type": "string"
+                  "type": "string",
+                  "example": "some_alphanumeric_id_24"
                 }
               }
             }
@@ -700,6 +1078,42 @@
         "required": [
           "name",
           "categories"
+        ]
+      },
+      "Menu": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Menu Cena"
+          },
+          "dishes": {
+            "title": "DishesArray",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "some_alphanumeric_id_24"
+                }
+              }
+            }
+          },
+          "start_time": {
+            "type": "number",
+            "example": "minutes_since_midnight"
+          },
+          "end_time": {
+            "type": "number",
+            "example": "minutes_since_midnight"
+          }
+        },
+        "required": [
+          "name",
+          "dishes",
+          "start_time",
+          "end_time"
         ]
       },
       "apiResponse": {
