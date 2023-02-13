@@ -49,7 +49,7 @@ const createUser = async (req, res, next) => {
     /* istanbul ignore next */
     if(!user_was_saved)
         return fail(500, "internal server error");
-    res.status(201).send({ msg: "user saved successfully", id: document._id});
+    res.status(201).send({ msg: "user saved successfully" });
 };
 
 const deleteUser = async (req, res, next) => {
