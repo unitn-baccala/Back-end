@@ -66,7 +66,7 @@ const deleteUser = async (req, res, next) => {
         return fail(400, "req.body.email == null");
     if(password == null) 
         return fail(400, "req.body.password == null");
-    const user = await User.findOne({ id: user_id, email }).exec();
+    const user = await User.findOne({ _id: user_id, email }).exec();
     if(user === null)
         return fail(400, "no user with such credentials");
     const password_is_correct = await argon2.verify(user.password_hash, password);
@@ -87,6 +87,24 @@ const deleteUser = async (req, res, next) => {
     //Category.deleteMany({ owner_id: user._id });
 
     res.status(200).send({ msg: "user deleted successfully" });
+};
+
+const getUser = async (req, res, next) => {
+    const fail = failHandler(res, "failed to delete user: ");
+
+    /* istanbul ignore next */
+    if(req.body == null || req.body.jwt_payload == null)
+        return fail(500, "internal server error");
+    
+
+    const _id = req.body.jwt_payload.user_id;
+    
+    const user = await User.findOne({ _id }).exec();
+    /* istanbul ignore next */
+    if(user === null)
+        return fail(500, "internal server error");
+
+    res.status(200).send({ _id: user._id, business_name: user.business_name, email: user.email, enabled_2fa: user.enable_2fa });
 };
 
 module.exports = { createUser, deleteUser };
