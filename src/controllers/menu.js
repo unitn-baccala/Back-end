@@ -73,19 +73,14 @@ const deleteMenu = async (req, res, next) => {
 const getMenus = async (req, res, next) => {
     const fail = failHandler(res, "failed to get menus: ");
 
-    if (req.query == null)
+    /* istanbul ignore next */
+    if (req.body == null || req.body.jwt_payload == null) //this should never happen since the API requires token checking 
         return fail(500, "internal server error");
 
-    const business_name = req.query.business_name;
+    const owner_id = req.body.jwt_payload.user_id;
 
-    if (business_name == null)
-        return fail(400, "no business name specified");
-        
-    const user = await User.findOne({ business_name });
-    if (!user)
-        return fail(400, "no such business name found");
 
-    const menus = await Menu.find({ owner_id: user._id });
+    const menus = await Menu.find({ owner_id });
 
     if (menus == null)
         return fail(500, "internal server error");

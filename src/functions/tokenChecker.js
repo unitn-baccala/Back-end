@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const tokenChecker = function(req, res, next) {
-    const token = req.body.token;
+    const token = req.body.token || req.get('Authorization').substring(7);
     if (!token) {
         res.status(401).send({ msg: "token not provided" });
     } else {
