@@ -72,19 +72,12 @@ const getDishes = async (req, res, next) => {
     const fail = failHandler(res, "failed to get dishes: ");
     
     /* istanbul ignore next */
-    if (req.query == null)
+    if (req.body == null || req.body.jwt_payload == null)
         return fail(500, "internal server error");
     
-    const business_name = req.query.business_name;
+    const owner_id = req.body.jwt_payload.user_id
 
-    if(business_name == null)
-        return fail(400, "no business name specified");
-
-    const user = await User.findOne({business_name});
-    if(!user)
-        return fail(400, "no such business name found");
-
-    let dishes = await Dish.find({ owner_id: user._id });
+    let dishes = await Dish.find({ owner_id });
     
     for(let i = 0; i < dishes.length; i++) {
         if (dishes[i].image != null) {
