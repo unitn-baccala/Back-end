@@ -79,7 +79,7 @@ const getDishes = async (req, res, next) => {
 
     let dishes = await Dish.find({ owner_id });
     
-    for(let i = 0; i < dishes.length; i++)
+    for (let i = 0; i < dishes.length; i++)
         if (dishes[i].image != null)
             dishes[i].image = dishes[i].image.toString('base64');
 

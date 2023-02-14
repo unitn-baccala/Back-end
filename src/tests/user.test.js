@@ -49,11 +49,18 @@ describe(api_path, () => {
         await User.deleteOne({ email: valid_document.email });
     });
 
-    test.each(post_data)('POST (account registration) %d, %o', async (c,d) => await post(c,d));
+    test.each(post_data)('POST (registration) %d, %o', async (c,d) => await post(c,d));
 
-    test.each(delete_data)('DELETE (account deletion) %d, %d, %o', async (auth_code, del_code,d) => {
-        jwt = await request.post('/api/user/login')(auth_code, valid_document);
+    test.each(delete_data)('DELETE (deregistration) %d, %d, %o', async (auth_code, del_code,d) => {
+        let jwt = await request.post('/api/user/login')(auth_code, valid_document);
         await del(jwt)(del_code,d);
+    });
+    test('GET success', async () => {
+        let jwt = await request.init_test_auth();
+        await request.auth_get(api_path)(jwt)(200, {});
+    });
+    test('GET fail', async () => {
+        await request.get(api_path)(401, {});
     });
     
     afterAll(async () => {
