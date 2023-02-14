@@ -1,7 +1,9 @@
 const User = require('../models/user');
-const argon2 = require('argon2');
 const Ingredient = require('../models/ingredient');
 const Dish = require('../models/dish');
+const Category = require('../models/category');
+const Menu = require('../models/menu');
+const argon2 = require('argon2');
 const failHandler = require('../functions/fail');
 const jwt = require('jsonwebtoken');
 
@@ -114,8 +116,8 @@ const deleteUser = async (req, res, next) => {
 
     await Ingredient.deleteMany({ owner_id: user._id });
     await Dish.deleteMany({ owner_id: user._id });
-    //Menu.deleteMany({ owner_id: user._id });
-    //Category.deleteMany({ owner_id: user._id });
+    await Menu.deleteMany({ owner_id: user._id });
+    await Category.deleteMany({ owner_id: user._id });
 
     res.status(200).send({ msg: "user deleted successfully" });
 };
