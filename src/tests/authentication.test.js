@@ -1,8 +1,9 @@
 const request = require('./request'); //for http requests
 const Ingredient = require('../models/ingredient');
-const api_path = '/api/ingredient';
+const ingredient_api_path = '/api/ingredient';
+const api_path = '/api/user/login';
 
-const post = request.auth_post(api_path), del = request.auth_del(api_path);
+const post = request.auth_post(ingredient_api_path), del = request.auth_del(ingredient_api_path);
 
 let server, mongoose, jwt;
 
@@ -13,21 +14,19 @@ const invalid_credentials = [
     [ 400, { email: "test.user@for.tests.com", password: null } ],
     [ 400, { password: "VeryGoodPassword!" } ],
 ];
-describe('/api/authenticate', () => {
+describe(api_path, () => {
     beforeAll(async () => {
         let app = require("../app");
         server = app.server;
         mongoose = require('mongoose');
-    });
 
-    test("POST auth", async () => {
         jwt = await request.init_test_auth();
     });
 
-    test.each(invalid_credentials)("POST auth %d %o", async (c,d) => await request.post('/api/authenticate')(c,d));
+    test.each(invalid_credentials)("POST auth %d %o", async (c,d) => await request.post(api_path)(c,d));
 
     test("using bad jwt", async () => {
-        await post({token: "not really a jwt"})(403, valid_document);
+        await post({token: "not really a jwt"})(401, valid_document);
     });
 
     test("using no jwt", async () => {

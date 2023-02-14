@@ -3,6 +3,8 @@ const argon2 = require('argon2');
 const Ingredient = require('../models/ingredient');
 const Dish = require('../models/dish');
 const failHandler = require('../functions/fail');
+const jwt = require('jsonwebtoken');
+
 
 const createUser = async (req, res, next) => {
     const fail = failHandler(res, "failed to create user: ");
@@ -51,6 +53,35 @@ const createUser = async (req, res, next) => {
         return fail(500, "internal server error");
     res.status(201).send({ msg: "user saved successfully" });
 };
+
+const authenticateUser = async (req, res) => {
+    const fail = (code, msg) => {
+        res.status(code).send({ msg: "authentication failed: "+msg });
+    };
+    const user_email = req.body.email, user_password = req.body.password;
+    if(user_password == null)
+        return fail(400, "req.body.password == null");
+    if(user_email == null)
+        return fail(400, "req.body.email == null");
+
+    const found_user = await User.findOne({ email: user_email }).exec();
+    const found_a_user_with_correct_pw = found_user != null && await argon2.verify(found_user.password_hash, user_password);
+    if (!found_a_user_with_correct_pw)
+        return fail(404, "wrong credentials");
+    
+    const payload = { user_id: found_user._id };
+    const options = { expiresIn: 86400 };
+    jwt.sign(payload, process.env.JWT_SECRET, options, (err, jwtToken) => {
+        /* istanbul ignore next */
+        if(err) {
+            //console.log(err);
+            fail(500, "internal server error");
+        } else {
+            res.status(200).send({ token: jwtToken });
+        }
+    });
+};
+
 
 const deleteUser = async (req, res, next) => {
     const fail = failHandler(res, "failed to delete user: ");
@@ -106,4 +137,4 @@ const getUser = async (req, res, next) => {
     res.status(200).send({ _id: user._id, business_name: user.business_name, email: user.email, enabled_2fa: user.enable_2fa });
 };
 
-module.exports = { createUser, deleteUser, getUser };
+module.exports = { createUser, authenticateUser, deleteUser, getUser };

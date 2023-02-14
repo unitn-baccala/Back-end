@@ -5,6 +5,6 @@ const controller = require('../controllers/ingredient');
 
 router.post('/ingredient', tokenChecker, controller.createIngredient);
 router.delete('/ingredient', tokenChecker, controller.deleteIngredient);
-router.get('/ingredient', controller.getIngredients);
+router.get('/ingredient', tokenChecker, controller.getIngredients);
 
 module.exports = router;

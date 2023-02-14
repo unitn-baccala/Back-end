@@ -1,5 +1,5 @@
 const request = require('./request'); //for http requests
-
+const User = require('../models/user');
 const api_path = '/api/user';
 
 const post = request.post(api_path), del = request.auth_del(api_path);
@@ -28,13 +28,15 @@ const post_data = [
     [ 400, { email: 'giovanni.bianchi@example.com', password: 'OttimaPassword1234', business_name: 'Da Marco' } ],  // business_name taken
 ];
 const delete_data = (
-    [
-        [ 400, { email: 'marco.rossi@example.com', password: 'PasswordSicura43' } ],
-        [ 400, { email: 'marco.rossi@example.com' } ],
-        [ 400, { email: 'marco.rossi@example.com', password: null } ],
-    ].concat(
-        post_data.map(a => (a[0] == 201 ? [200, a[1]] : a))
-    )
+    [// [auth_response_code, delete_status_code, body]
+        [ 200, 400, { email: 'marco.rossi@example.com', password: 'PasswordSicura43' } ],
+        [ 200, 400, { password: 'PasswordSicura42' } ],
+        [ 200, 400, { email: 'marco.rossi@example.com' } ],
+        [ 200, 400, { email: 'marco.rossi@example.com', password: null } ],
+        [ 200, 400, { email: 'giovanni.bianchi@example.com', password: 'OttimaPassword1234' } ],
+        [ 200, 200, valid_document ],
+        [ 404, 401, valid_document ],
+    ]
 );
 
 let server, mongoose, jwt;
@@ -43,16 +45,16 @@ describe(api_path, () => {
         let app = require("../app");
         server = app.server;
         mongoose = require('mongoose');
-        jwt = await request.init_test_auth();
-        await Promise.allSettled([
-            del(200, valid_document)
-        ]);
         
+        await User.deleteOne({ email: valid_document.email });
     });
 
     test.each(post_data)('POST (account registration) %d, %o', async (c,d) => await post(c,d));
 
-    test.each(delete_data)('DELETE (account deletion) %d, %o', async (c,d) => await del(jwt)(c,d));
+    test.each(delete_data)('DELETE (account deletion) %d, %d, %o', async (auth_code, del_code,d) => {
+        jwt = await request.post('/api/user/login')(auth_code, valid_document);
+        await del(jwt)(del_code,d);
+    });
     
     afterAll(async () => {
         server.close();

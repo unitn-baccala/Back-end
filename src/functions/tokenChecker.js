@@ -1,7 +1,15 @@
 const jwt = require('jsonwebtoken');
 
+const getAuthHeader = req => {
+    const header = req.get('Authorization');
+    if (header == null) 
+        return header;
+    else 
+        return header.split(' ')[1];
+};
+
 const tokenChecker = function(req, res, next) {
-    const token = req.body.token || req.get('Authorization').split(' ')[1];
+    const token = req.body.token || getAuthHeader(req);
     if (!token) {
         res.status(401).send({ msg: "token not provided" });
     } else {

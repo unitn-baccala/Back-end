@@ -6,7 +6,7 @@ const createIngredient = async (req, res, next) => {
     const fail = failHandler(res, "failed to create ingredient: ");
 
     /* istanbul ignore next */
-    if (req.body == null || req.body.jwt_payload == null) //this should never happen since the API requires token checking 
+    if (req.body == null || req.body.jwt_payload == null)
         return fail(500, "internal server error");
 
     const name = req.body.name, owner_id = req.body.jwt_payload.user_id; 
@@ -33,7 +33,7 @@ const deleteIngredient = async (req, res, next) => {
     const fail = failHandler(res, "failed to delete ingredient: ");
  
     /* istanbul ignore next */
-    if (req.body == null || req.body.jwt_payload == null) // the function is token checked so this cannot happen
+    if (req.body == null || req.body.jwt_payload == null)
         return fail(500, "internal server error");
     
     const _id = req.body.ingredient_id, owner_id = req.body.jwt_payload.user_id;
@@ -52,18 +52,13 @@ const getIngredients = async (req, res, next) => {
     const fail = failHandler(res, "failed to get ingredients: ");
 
     /* istanbul ignore next */
-    if (req.query == null) //req.query can be empty but not null so this should not happen
+    if (req.body == null || req.body.jwt_payload == null)
         return fail(500, "internal server error");
     
-    const business_name = req.query.business_name;
-    if(business_name == null)
-        return fail(400, "no business name specified");
+    const owner_id = req.body.jwt_payload.user_id;
 
-    const user = await User.findOne({business_name});
-    if(!user)
-        return fail(400, "no such business name found");
+    const ingredients = await Ingredient.find({ owner_id });
 
-    const ingredients = await Ingredient.find({ owner_id: user._id });
     /* istanbul ignore next */
     if (!ingredients)
         return fail(500, "internal server error");

@@ -2,7 +2,7 @@ const request = require('./request'); //for http requests
 const Ingredient = require('../models/ingredient');
 const api_path = '/api/ingredient';
 
-const post = request.auth_post(api_path), del = request.auth_del(api_path);
+const auth_post = request.auth_post(api_path), auth_del = request.auth_del(api_path), auth_get = request.auth_get(api_path);
 
 let server, mongoose;
 
@@ -31,19 +31,16 @@ describe(api_path, () => {
         await Ingredient.deleteOne(valid_document).exec();
     });
 
-    test("POST successful dish creation", async () => {
-        const ingredient_id = (await post(jwt)(201, valid_document)).id;
+    test("POST (succeed creation)", async () => {
+        const ingredient_id = (await auth_post(jwt)(201, valid_document)).id;
         delete_data[0][1] = delete_data[1][1] = { ingredient_id };
     });
-    test.each(post_data)("POST (ingredient creation) %d %o", async (c, d) => await post(jwt)(c,d));
+    test.each(post_data)("POST (fail creation) %d %o", async (c, d) => await auth_post(jwt)(c,d));
 
-    test.each(delete_data)("DELETE (ingredient deletion) %d %o", async (c, d) => await del(jwt)(c,d));
+    test.each(delete_data)("DELETE (deletion) %d %o", async (c, d) => await auth_del(jwt)(c,d));
 
-    test("GET (successful ingredient read)", () => request.get("/api/ingredient?business_name=Nome Ristorante Test")(200, null));
 
-    test("GET (fail ingredient read, wrong business_name)", () => request.get("/api/ingredient?business_name=Ristorante Impossibile")(400, null));
-
-    test("GET (fail ingredient read, no business name)", () => request.get("/api/ingredient")(400, null));
+    test("GET (read)", () => auth_get(jwt)(200, null));
     
 
     afterAll(async () => {

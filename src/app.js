@@ -5,7 +5,6 @@ const cors = require('cors')
 
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', true);
-const authenticate = require('./routes/authenticate');
 const user = require('./routes/user');
 const ingredient = require('./routes/ingredient');
 const dish = require('./routes/dish');
@@ -38,7 +37,6 @@ const server = app.listen(port, () => {
 app.use(cors()); //accept request from everywhere on all routes
 
 //routes without protection
-app.use('/api/', authenticate);
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 //protected routes with exceptions
