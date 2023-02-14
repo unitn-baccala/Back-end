@@ -5,5 +5,6 @@ const controller = require('../controllers/user');
 
 router.post('/user', controller.createUser);
 router.delete('/user', tokenChecker, controller.deleteUser);
+router.get('/user', tokenChecker, controller.getUser);
 
 module.exports = router;

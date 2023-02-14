@@ -95,7 +95,6 @@ const getUser = async (req, res, next) => {
     /* istanbul ignore next */
     if(req.body == null || req.body.jwt_payload == null)
         return fail(500, "internal server error");
-    
 
     const _id = req.body.jwt_payload.user_id;
     
@@ -107,4 +106,4 @@ const getUser = async (req, res, next) => {
     res.status(200).send({ _id: user._id, business_name: user.business_name, email: user.email, enabled_2fa: user.enable_2fa });
 };
 
-module.exports = { createUser, deleteUser };
+module.exports = { createUser, deleteUser, getUser };
