@@ -8,7 +8,7 @@ const tokenChecker = function(req, res, next) {
         jwt.verify(token, process.env.JWT_SECRET, function(err, decoded) {
             if(err) {
                 //console.log(err);
-                res.status(403).send({ msg: "token not valid" });
+                res.status(401).send({ msg: "token not valid" });
             } else {
                 req.body.jwt_payload = decoded;
                 next(); //go to next route
