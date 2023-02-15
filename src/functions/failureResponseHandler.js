@@ -1,5 +1,5 @@
-const failHandler = (res, resourceFail) => (code, msg) => {
+const failureResponseHandler = (res, resourceFail) => (code, msg) => {
     res.status(code).send({ msg: (resourceFail + msg)});
 };
 
-module.exports = failHandler;
+module.exports = failureResponseHandler;
