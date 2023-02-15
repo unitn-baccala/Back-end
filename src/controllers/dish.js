@@ -2,12 +2,12 @@ const Dish = require('../models/dish');
 const User = require('../models/user');
 const Ingredient = require('../models/ingredient');
 const Category = require('../models/category');
-const failHandler = require('../functions/failureResponseHandler');
+const failureResponseHandler = require('../functions/failureResponseHandler');
 const ObjectId = require('mongoose').Types.ObjectId;
 const validateObjectIds = require('../functions/validateObjectIds');
 
 const createDish = async (req, res, next) => {
-    const fail = failHandler(res, "failed to create dish: ");
+    const fail = failureResponseHandler(res, "failed to create dish: ");
 
     /* istanbul ignore next */
     if (req.body == null || req.body.jwt_payload == null)
@@ -49,7 +49,7 @@ const createDish = async (req, res, next) => {
 }
 
 const deleteDish = async (req, res, next) => {
-    const fail = failHandler(res, "failed to delete dish: ");
+    const fail = failureResponseHandler(res, "failed to delete dish: ");
 
     /* istanbul ignore next */
     if (req.body == null || req.body.jwt_payload == null)
@@ -69,7 +69,7 @@ const deleteDish = async (req, res, next) => {
 }
 
 const getDishes = async (req, res, next) => {
-    const fail = failHandler(res, "failed to get dishes: ");
+    const fail = failureResponseHandler(res, "failed to get dishes: ");
     
     /* istanbul ignore next */
     if (req.body == null || req.body.jwt_payload == null)

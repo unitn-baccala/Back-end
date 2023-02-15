@@ -1,14 +1,14 @@
 /* istanbul ignore file */
-const Menu = require('../models/menu')
+const Menu = require('../models/menu');
 const Dish = require('../models/dish');
-const User = require('../models/user')
+const User = require('../models/user');
 const ObjectId = require('mongoose').Types.ObjectId;
-const failHandler = require('../functions/failureResponseHandler');
+const failureResponseHandler = require('../functions/failureResponseHandler');
 const validateObjectIds = require('../functions/validateObjectIds');
 const currentTime = require('../functions/currentTime');
 
 const createMenu = async (req, res, next) => {
-    const fail = failHandler(res, "failed to create menu: ");
+    const fail = failureResponseHandler(res, "failed to create menu: ");
 
     /* istanbul ignore next */
     if (req.body == null || req.body.jwt_payload == null) //this should never happen since the API requires token checking 
@@ -51,7 +51,7 @@ const createMenu = async (req, res, next) => {
 }
 
 const deleteMenu = async (req, res, next) => {
-    const fail = failHandler(res, "failed to delete menu: ");
+    const fail = failureResponseHandler(res, "failed to delete menu: ");
 
     /* istanbul ignore next */
     if (req.body == null || req.body.jwt_payload == null) //this should never happen since the API requires token checking 
@@ -71,7 +71,7 @@ const deleteMenu = async (req, res, next) => {
 }
 
 const getMenus = async (req, res, next) => {
-    const fail = failHandler(res, "failed to get menus: ");
+    const fail = failureResponseHandler(res, "failed to get menus: ");
 
     /* istanbul ignore next */
     if (req.body == null || req.body.jwt_payload == null) //this should never happen since the API requires token checking 
@@ -89,7 +89,7 @@ const getMenus = async (req, res, next) => {
 }
 
 const getFullMenu = async (req, res, next) => {
-    const fail = failHandler(res, "failed to get menus: ");
+    const fail = failureResponseHandler(res, "failed to get menus: ");
 
     if (req.query == null)
         return fail(500, "internal server error");

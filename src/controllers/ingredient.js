@@ -1,9 +1,9 @@
 const Ingredient = require('../models/ingredient');
 const User = require('../models/user');
-const failHandler = require('../functions/failureResponseHandler');
+const failureResponseHandler = require('../functions/failureResponseHandler');
 
 const createIngredient = async (req, res, next) => { 
-    const fail = failHandler(res, "failed to create ingredient: ");
+    const fail = failureResponseHandler(res, "failed to create ingredient: ");
 
     /* istanbul ignore next */
     if (req.body == null || req.body.jwt_payload == null)
@@ -30,7 +30,7 @@ const createIngredient = async (req, res, next) => {
 
 //TODO: should be checking if the ingredients is used in any dishes
 const deleteIngredient = async (req, res, next) => {
-    const fail = failHandler(res, "failed to delete ingredient: ");
+    const fail = failureResponseHandler(res, "failed to delete ingredient: ");
  
     /* istanbul ignore next */
     if (req.body == null || req.body.jwt_payload == null)
@@ -49,7 +49,7 @@ const deleteIngredient = async (req, res, next) => {
 }
 
 const getIngredients = async (req, res, next) => {
-    const fail = failHandler(res, "failed to get ingredients: ");
+    const fail = failureResponseHandler(res, "failed to get ingredients: ");
 
     /* istanbul ignore next */
     if (req.body == null || req.body.jwt_payload == null)

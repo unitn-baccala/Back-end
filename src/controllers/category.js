@@ -1,10 +1,10 @@
 /* istanbul ignore file */
 const Category = require('../models/category');500
 const User = require('../models/user');
-const failHandler = require('../functions/failureResponseHandler');
+const failureResponseHandler = require('../functions/failureResponseHandler');
 
 const createCategory = async (req, res, next) => { 
-    const fail = failHandler(res, "failed to create category: ");
+    const fail = failureResponseHandler(res, "failed to create category: ");
     
     /* istanbul ignore next */
     if (req.body == null || req.body.jwt_payload == null)
@@ -32,7 +32,7 @@ const createCategory = async (req, res, next) => {
 
 //TODO: should be checking if the category is used in any dishes
 const deleteCategory = async (req, res, next) => {
-    const fail = failHandler(res, "failed to delete category: ");
+    const fail = failureResponseHandler(res, "failed to delete category: ");
  
     /* istanbul ignore next */
     if (req.body == null || req.body.jwt_payload == null)
@@ -51,7 +51,7 @@ const deleteCategory = async (req, res, next) => {
 }
 
 const getCategories = async (req, res, next) => {
-    const fail = failHandler(res, "failed to get category: ");
+    const fail = failureResponseHandler(res, "failed to get category: ");
 
     /* istanbul ignore next */
     if (req.query == null)
