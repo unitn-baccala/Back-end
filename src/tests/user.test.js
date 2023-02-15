@@ -39,7 +39,7 @@ const delete_data = (
     ]
 );
 
-let server, mongoose, jwt;
+let server, mongoose;
 describe(api_path, () => {
     beforeAll(async () => {
         let app = require("../app");
@@ -52,11 +52,11 @@ describe(api_path, () => {
     test.each(post_data)('POST (registration) %d, %o', async (c,d) => await post(c,d));
 
     test.each(delete_data)('DELETE (deregistration) %d, %d, %o', async (auth_code, del_code,d) => {
-        let jwt = await request.post('/api/user/login')(auth_code, valid_document);
+        const jwt = await request.post('/api/user/login')(auth_code, valid_document);
         await del(jwt)(del_code,d);
     });
     test('GET success', async () => {
-        let jwt = (await request.init_test_auth()).jwt;
+        const jwt = (await request.init_test_auth()).jwt;
         await request.auth_get(api_path)(jwt)(200, {});
     });
     test('GET fail', async () => {
