@@ -31,13 +31,13 @@ mongoose.connect(
 
 const server = app.listen(port, async () => {
     console.log(`App listening on http://localhost:${port}\n`+
-    `Docs available at http://localhost:${port}/api/docs`);
+    `Docs available at http://localhost:${port}/api-docs`);
 });
 
 app.use(cors()); //accept request from everywhere on all routes
 
 //routes without protection
-app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 //protected routes with exceptions
 app.use('/api/', user);
