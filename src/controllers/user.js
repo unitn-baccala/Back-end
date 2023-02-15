@@ -11,23 +11,22 @@ const jwt = require('jsonwebtoken');
 const createUser = async (req, res, next) => {
     const failResponse = failureResponseHandler(res, "failed to create user: ");
 
-    /* istanbul ignore next */
-    if(req.body == null)
-        return failResponse(400, "req.body == null");
-
-    const password = req.body.password;
     let email = req.body.email;
+    const password = req.body.password;
     const business_name = req.body.business_name;
 
-    if(req.body.password == null)
-        return failResponse(400, "req.body.password == null");
     if(req.body.email == null)
         return failResponse(400, "req.body.email == null");
+    if(req.body.password == null)
+        return failResponse(400, "req.body.password == null");
     if(req.body.business_name == null)
         return failResponse(400, "req.body.business_name == null");
-
-    // pw must have 1 (lower or uppercase) letter and must be between 12 and 64 characters
-    // the maximum is important to protect from long password DoS attacks
+  
+	/*
+     * 	pw must have 1 (lower or uppercase) letter and must have
+     *	between 12 and 64 characters
+     *  the maximum is important to protect from long password DoS attacks
+     */
     if (!password.match(/^(?=.*[a-zA-Z])(.{12,64})$/))
         return failResponse(400, "insecure password");
 
@@ -38,12 +37,12 @@ const createUser = async (req, res, next) => {
     if (!email.match(/^([_a-z0-9]+[\._a-z0-9]*)(\+[a-z0-9]+)?@(([a-z0-9-]+\.)*[a-z]{2,4})$/))
         return failResponse(400, "invalid email address");
 
-    const email_taken = await User.findOne({ email }).exec() !== null;
-    if (email_taken)
+    const email_is_taken = await User.findOne({ email }).exec() !== null;
+    if (email_is_taken)
         return failResponse(400, "email address is taken");
 
-    const business_name_taken = await User.findOne({ business_name }).exec() !== null;
-    if(business_name_taken)
+    const business_name_is_taken = await User.findOne({ business_name }).exec() !== null;
+    if(business_name_is_taken)
         return failResponse(400, "business name is taken")
 
     const password_hash = await argon2.hash(password);
@@ -56,17 +55,21 @@ const createUser = async (req, res, next) => {
     res.status(201).send({ msg: "user saved successfully" });
 };
 
+
 const authenticateUser = async (req, res) => {
     const failResponse = failureResponseHandler(res, "authentication failed: ");
 
     const user_email = req.body.email, user_password = req.body.password;
+
     if(user_password == null)
         return failResponse(400, "req.body.password == null");
     if(user_email == null)
         return failResponse(400, "req.body.email == null");
 
     const found_user = await User.findOne({ email: user_email }).exec();
-    const found_a_user_with_correct_pw = found_user != null && await argon2.verify(found_user.password_hash, user_password);
+    const found_a_user_with_correct_pw = 
+        found_user != null && await argon2.verify(found_user.password_hash, user_password);
+    
     if (!found_a_user_with_correct_pw)
         return failResponse(404, "wrong credentials");
     
@@ -74,45 +77,45 @@ const authenticateUser = async (req, res) => {
     const options = { expiresIn: 86400 };
     jwt.sign(payload, process.env.JWT_SECRET, options, (err, jwtToken) => {
         /* istanbul ignore next */
-        if(err) {
-            //console.log(err);
+        if(err)
             failResponse(500, "internal server error");
-        } else {
+        else
             res.status(200).send({ token: jwtToken });
-        }
     });
 };
 
 
 const deleteUser = async (req, res, next) => {
-    const fail = failureResponseHandler(res, "failed to delete user: ");
+    const failResponse = failureResponseHandler(res, "failed to delete user: ");
 
-    /* istanbul ignore next */
-    if(req.body == null || req.body.jwt_payload == null)
-        return fail(400, "req.body == null || req.body.token == null");
-    
-
-    const email = req.body.email, password = req.body.password, user_id = req.body.jwt_payload.user_id;
+    let email = req.body.email;
+    const password = req.body.password; 
+    const user_id = req.body.jwt_payload.user_id;
     
     if(email == null) 
-        return fail(400, "req.body.email == null");
+        return failResponse(400, "req.body.email == null");
     if(password == null) 
-        return fail(400, "req.body.password == null");
+        return failResponse(400, "req.body.password == null");
+    
+    email = email.toLowerCase();
     const user = await User.findOne({ _id: user_id, email }).exec();
+
     if(user === null)
-        return fail(400, "no user with such credentials");
-    const password_is_correct = await argon2.verify(user.password_hash, password);
+        return failResponse(400, "wrong credentials");
+    
+    const password_hash = user.password_hash;
+    const password_is_correct = await argon2.verify(password_hash, password);
 
     if(!password_is_correct)
-        return fail(400, "no user with such credentials");
+        return failResponse(400, "wrong credentials");
 
-    let del_count = (await User.deleteOne({ email, password_hash: user.password_hash })).deletedCount;
+    let user_was_deleted = (await User.deleteOne({ email, password_hash })).deletedCount != 0;
 
     /* istanbul ignore next */
-    if(del_count == 0)
-        return fail(500, "internal server error");
+    if(!user_was_deleted)
+        return failResponse(500, "internal server error");
 
-
+    // delete documents owned by the user
     await Ingredient.deleteMany({ owner_id: user._id });
     await Dish.deleteMany({ owner_id: user._id });
     await Menu.deleteMany({ owner_id: user._id });
@@ -122,20 +125,21 @@ const deleteUser = async (req, res, next) => {
 };
 
 const getUser = async (req, res, next) => {
-    const fail = failureResponseHandler(res, "failed to delete user: ");
-
-    /* istanbul ignore next */
-    if(req.body == null || req.body.jwt_payload == null)
-        return fail(500, "internal server error");
+    const failResponse = failureResponseHandler(res, "failed to delete user: ");
 
     const _id = req.body.jwt_payload.user_id;
     
     const user = await User.findOne({ _id }).exec();
     /* istanbul ignore next */
     if(user === null)
-        return fail(500, "internal server error");
+        return failResponse(500, "internal server error");
 
-    res.status(200).send({ _id: user._id, business_name: user.business_name, email: user.email, enabled_2fa: user.enable_2fa });
+
+  	//send everything except password_hash
+    res.status(200).send({ 
+      _id: user._id, business_name: user.business_name, 
+      email: user.email, enabled_2fa: user.enable_2fa 
+    });
 };
 
 module.exports = { createUser, authenticateUser, deleteUser, getUser };

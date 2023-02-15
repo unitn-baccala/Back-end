@@ -4,6 +4,9 @@ const validateObjectIds = async (arr, MongooseModel) => {
     if (arr == null) 
         return [];
     let objids = [];
+    
+    if(!Array.isArray(arr))
+        return null;
 
     for(let i = 0; i < arr.length; i++) {
         try{

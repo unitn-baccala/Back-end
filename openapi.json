@@ -211,7 +211,7 @@
           }
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "successful login",
             "content": {
               "application/json": {
@@ -228,7 +228,17 @@
             }
           },
           "400": {
-            "description": "failed to login",
+            "description": "invalid credentials",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/apiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "email or password were not in the body",
             "content": {
               "application/json": {
                 "schema": {

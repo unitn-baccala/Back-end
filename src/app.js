@@ -29,7 +29,7 @@ mongoose.connect(
     }
 );
 
-const server = app.listen(port, () => {
+const server = app.listen(port, async () => {
     console.log(`App listening on http://localhost:${port}\n`+
     `Docs available at http://localhost:${port}/api/docs`);
 });
@@ -45,5 +45,7 @@ app.use('/api/', ingredient);
 app.use('/api/', dish);
 app.use('/api/', category);
 app.use('/api/', menu);
+
+
 
 module.exports = { server };
