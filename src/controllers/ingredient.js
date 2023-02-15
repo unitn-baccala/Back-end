@@ -1,6 +1,6 @@
 const Ingredient = require('../models/ingredient');
 const User = require('../models/user');
-const failHandler = require('../functions/fail');
+const failHandler = require('../functions/failureResponseHandler');
 
 const createIngredient = async (req, res, next) => { 
     const fail = failHandler(res, "failed to create ingredient: ");

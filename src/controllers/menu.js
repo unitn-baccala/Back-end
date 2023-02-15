@@ -3,7 +3,7 @@ const Menu = require('../models/menu')
 const Dish = require('../models/dish');
 const User = require('../models/user')
 const ObjectId = require('mongoose').Types.ObjectId;
-const failHandler = require('../functions/fail');
+const failHandler = require('../functions/failureResponseHandler');
 const validateObjectIds = require('../functions/validateObjectIds');
 const currentTime = require('../functions/currentTime');
 

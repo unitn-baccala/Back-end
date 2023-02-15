@@ -2,7 +2,7 @@ const Dish = require('../models/dish');
 const User = require('../models/user');
 const Ingredient = require('../models/ingredient');
 const Category = require('../models/category');
-const failHandler = require('../functions/fail');
+const failHandler = require('../functions/failureResponseHandler');
 const ObjectId = require('mongoose').Types.ObjectId;
 const validateObjectIds = require('../functions/validateObjectIds');
 
