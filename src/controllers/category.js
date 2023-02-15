@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 const Category = require('../models/category');500
 const User = require('../models/user');
-const failHandler = require('../functions/fail');
+const failHandler = require('../functions/failureResponseHandler');
 
 const createCategory = async (req, res, next) => { 
     const fail = failHandler(res, "failed to create category: ");
