@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://localhost/api/"
+      "url": "http://localhost:3000/"
     }
   ],
   "tags": [
@@ -122,6 +122,125 @@
             "$ref": "#/components/responses/internalServerError"
           }
         }
+      },
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "security": [
+          {
+            "httpBearerAuth": []
+          }
+        ],
+        "summary": "Retrieve the user's information",
+        "responses": {
+          "200": {
+            "description": "information retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "UserInfo",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "some_alphanumeric_id_24"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "mario.rossi@gmail.com"
+                    },
+                    "business_name": {
+                      "type": "string",
+                      "example": "Trattoria Volpe"
+                    },
+                    "enabled_2fa": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "failed to retrieve information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/apiResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthenticatedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/forbiddenError"
+          },
+          "500": {
+            "$ref": "#/components/responses/internalServerError"
+          }
+        }
+      }
+    },
+    "/api/user/login": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Obtain a JSON Web Token",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "mario.rossi@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "12characterpassword"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "successful login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "example": "a valid jwt"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "failed to login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/apiResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/internalServerError"
+          }
+        }
       }
     },
     "/api/ingredient": {
@@ -229,18 +348,12 @@
         "tags": [
           "ingredient"
         ],
-        "summary": "Retrieve a user's ingredients",
-        "parameters": [
+        "security": [
           {
-            "name": "business_name",
-            "in": "query",
-            "description": "The name of the business which owns the ingredients that will be returned",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "httpBearerAuth": []
           }
         ],
+        "summary": "Retrieve the user's ingredients",
         "responses": {
           "200": {
             "description": "ingredients retrieved successfully",
@@ -279,6 +392,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthenticatedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/forbiddenError"
           },
           "500": {
             "$ref": "#/components/responses/internalServerError"
@@ -391,18 +510,12 @@
         "tags": [
           "category"
         ],
-        "summary": "Retrieve a user's categories",
-        "parameters": [
+        "security": [
           {
-            "name": "business_name",
-            "in": "query",
-            "description": "The name of the business which owns the categories that will be returned",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "httpBearerAuth": []
           }
         ],
+        "summary": "Retrieve the user's categories",
         "responses": {
           "200": {
             "description": "categories retrieved successfully",
@@ -441,6 +554,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthenticatedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/forbiddenError"
           },
           "500": {
             "$ref": "#/components/responses/internalServerError"
@@ -553,18 +672,12 @@
         "tags": [
           "dish"
         ],
-        "summary": "Retrieve a user's dishes",
-        "parameters": [
+        "security": [
           {
-            "name": "business_name",
-            "in": "query",
-            "description": "The name of the business which owns the dishes that will be returned",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "httpBearerAuth": []
           }
         ],
+        "summary": "Retrieve the user's dishes",
         "responses": {
           "200": {
             "description": "dishes retrieved successfully",
@@ -638,6 +751,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthenticatedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/forbiddenError"
           },
           "500": {
             "$ref": "#/components/responses/internalServerError"
@@ -750,18 +869,12 @@
         "tags": [
           "menu"
         ],
-        "summary": "Retrieve a user's menus",
-        "parameters": [
+        "security": [
           {
-            "name": "business_name",
-            "in": "query",
-            "description": "The name of the business which owns the menus that will be returned",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "httpBearerAuth": []
           }
         ],
+        "summary": "Retrieve the user's menus",
         "responses": {
           "200": {
             "description": "menus retrieved successfully",
@@ -821,6 +934,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthenticatedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/forbiddenError"
           },
           "500": {
             "$ref": "#/components/responses/internalServerError"
