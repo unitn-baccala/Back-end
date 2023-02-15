@@ -6,10 +6,6 @@ const failureResponseHandler = require('../functions/failureResponseHandler');
 const createCategory = async (req, res, next) => { 
     const failResponse = failureResponseHandler(res, "failed to create category: ");
     
-    /* istanbul ignore next */
-    if (req.body == null || req.body.jwt_payload == null)
-        return failResponse(500, "internal server error");
-
     const name = req.body.name, owner_id = req.body.jwt_payload.user_id;
 
     if(name == null || String(name).length < 1)

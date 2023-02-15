@@ -20,6 +20,8 @@ const createMenu = async (req, res, next) => {
         return failResponse(400, "invalid 'start_time' parameter");
     if(!Number.isInteger(end_time))
         return failResponse(400, "invalid 'end_time' parameter");
+    if(start_time >= end_time) 
+        return failResponse(400, "start_time >= end_time");
 
     const dishes = await validateObjectIds(unvalidated_dish_ids, Dish);
 

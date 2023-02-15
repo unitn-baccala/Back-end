@@ -136,7 +136,7 @@ const getUser = async (req, res, next) => {
 
 
   	//send everything except password_hash
-    res.status(200).send({ 
+    res.status(200).send({
       _id: user._id, business_name: user.business_name, 
       email: user.email, enabled_2fa: user.enable_2fa 
     });

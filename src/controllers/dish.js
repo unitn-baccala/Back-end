@@ -58,11 +58,7 @@ const deleteDish = async (req, res, next) => {
 
 const getDishes = async (req, res, next) => {
     const failResponse = failureResponseHandler(res, "failed to get dishes: ");
-    
-    /* istanbul ignore next */
-    if (req.body == null || req.body.jwt_payload == null)
-        return failResponse(500, "internal server error");
-    
+
     const owner_id = req.body.jwt_payload.user_id
 
     let dishes = await Dish.find({ owner_id });
