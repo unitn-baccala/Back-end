@@ -27,7 +27,7 @@ describe(api_path, () => {
         let app = require("../app");
         server = app.server;
         mongoose = require('mongoose');
-        jwt = await request.init_test_auth();
+        jwt = (await request.init_test_auth()).jwt;
         await Ingredient.deleteOne(valid_document).exec();
     });
 

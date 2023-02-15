@@ -56,7 +56,7 @@ describe(api_path, () => {
         await del(jwt)(del_code,d);
     });
     test('GET success', async () => {
-        let jwt = await request.init_test_auth();
+        let jwt = (await request.init_test_auth()).jwt;
         await request.auth_get(api_path)(jwt)(200, {});
     });
     test('GET fail', async () => {
