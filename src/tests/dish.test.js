@@ -15,6 +15,12 @@ let valid_document = {
     image: 'tecnicamenteBase64zz',
 };
 
+let preexisting_document = {
+    name: 'pizza valida2',
+    description: 'descrizione',
+    ingredients: [  ], //later_populated
+};
+
 const post_data = [
     [ 400, valid_document ],
     [ 400, { name: valid_document.name } ],
@@ -42,6 +48,7 @@ describe(api_path, () => {
     beforeAll(async () => {
         const auth_info = await request.init_test_auth();
         jwt = auth_info.jwt;
+        preexisting_document.owner_id = auth_info.test_user._id;
 
         //create a valid ingredient to put in the test dish document
         let valid_ingredient = { name: "ingrediente valido", owner_id: auth_info.test_user._id };
@@ -52,6 +59,7 @@ describe(api_path, () => {
         valid_document.ingredients.push(valid_ingredient._id);
 
         await Dish.deleteOne({ owner_id: auth_info.test_user._id, name: valid_document.name });
+        await new Dish(preexisting_document).save();
     });
     test("POST (succeed creation)", async () => {
         const dish_id = (await auth_post(jwt)(201, valid_document)).id;
@@ -64,6 +72,7 @@ describe(api_path, () => {
     test.each(delete_data)("DELETE (deletion) %d, %o", async (c,d) => await auth_del(jwt)(c,d));
     
     afterAll(async () => {
+        await Dish.remove(preexisting_document);
         app.server.close();
         await mongoose.disconnect();
     });
